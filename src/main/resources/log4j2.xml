@@ -1,0 +1,20 @@
+<Configuration name="ConfigTest" status="WARN" monitorInterval="5">
+
+    <Appenders>
+        <!-- Console -->
+        <Console name="Console">
+            <PatternLayout pattern=" ---!!!!--- [%d] [%t] %-5p %c{1}:%L - %m%n"/> <!--formatting-->
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!-- level - will show this and more severe levels -->
+        <Logger name="org.example" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Root level="error">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
