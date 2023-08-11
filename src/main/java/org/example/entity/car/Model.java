@@ -2,6 +2,7 @@ package org.example.entity.car;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.entity.HasId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +13,13 @@ import java.util.List;
 @Getter @Setter
 @ToString
 @EqualsAndHashCode(of = { "carBrand", "modelName", "year", "horsePowers" })
-public class Model {
+public class Model implements HasId<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinColumn(name = "car_brand_id")
     private CarBrand carBrand;
 

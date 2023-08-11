@@ -1,7 +1,8 @@
-package org.example.entity;
+package org.example.entity.deals;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.entity.HasId;
 import org.example.entity.user.Lessor;
 import org.example.entity.user.Renter;
 
@@ -13,19 +14,23 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @ToString
 @EqualsAndHashCode(of = { "productCard" })
-public class RentalRecord {
+public class RentalRecord implements HasId<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "product_card")
     private ProductCard productCard;
 
     @ManyToOne
     @JoinColumn(name = "renter_id")
     private Renter renter;
+
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinColumn(name = "address_id")
+    private Address address;
 
     @Column(name = "rented_at")
     private LocalDateTime rentedAt;
@@ -40,11 +45,11 @@ public class RentalRecord {
         }
     }
 
-    public boolean isInLeasing() {
-        return returnedAt == null;
-    }
-
     public Lessor getLessor() {
         return getProductCard().getLessor();
+    }
+
+    public boolean isInLeasing() {
+        return returnedAt == null;
     }
 }

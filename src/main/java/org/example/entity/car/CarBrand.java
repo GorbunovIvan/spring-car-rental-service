@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.example.entity.HasId;
 
 @Entity
 @Table(name = "car_brands")
@@ -11,11 +12,11 @@ import lombok.*;
 @Getter @Setter
 @ToString
 @EqualsAndHashCode(of = "name")
-public class CarBrand {
+public class CarBrand implements HasId<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name", unique = true)
     @NotNull

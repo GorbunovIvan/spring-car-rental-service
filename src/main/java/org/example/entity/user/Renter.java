@@ -3,8 +3,8 @@ package org.example.entity.user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.example.entity.ProductCard;
-import org.example.entity.RentalRecord;
+import org.example.entity.deals.ProductCard;
+import org.example.entity.deals.RentalRecord;
 import org.example.entity.car.Car;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.List;
 @Getter @Setter
 @ToString
 @EqualsAndHashCode(of = "user")
-public class Renter {
+public class Renter implements Partaker<Renter> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +27,7 @@ public class Renter {
     private User user;
 
     @OneToMany(mappedBy = "renter")
+    @OrderBy("rentedAt")
     private List<RentalRecord> rentalRecords = new ArrayList<>();
 
     public List<Car> getCarsInUsage() {
@@ -35,5 +36,10 @@ public class Renter {
                 .map(RentalRecord::getProductCard)
                 .map(ProductCard::getCar)
                 .toList();
+    }
+
+    @Override
+    public Renter get() {
+        return this;
     }
 }

@@ -1,9 +1,10 @@
-package org.example.entity.car;
+package org.example.entity.deals;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.example.entity.HasId;
 
 @Entity
 @Table(name = "addresses")
@@ -11,7 +12,7 @@ import lombok.*;
 @Getter @Setter
 @ToString
 @EqualsAndHashCode
-public class Address {
+public class Address implements HasId<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
