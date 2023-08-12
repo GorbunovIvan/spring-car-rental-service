@@ -9,12 +9,13 @@ import org.example.entity.deals.RentalRecord;
 import org.example.entity.user.Lessor;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Entity
 @Table(name = "cars",
         uniqueConstraints = @UniqueConstraint(columnNames = { "model_id", "lessor_id" }))
-@NoArgsConstructor @AllArgsConstructor
+@AllArgsConstructor
 @Getter @Setter
 @ToString
 @EqualsAndHashCode(of = { "model", "lessor" })
@@ -26,7 +27,7 @@ public class Car implements HasId<Long> {
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinColumn(name = "model_id")
-    @NotNull
+    @NotNull(message = "model is empty")
     private Model model;
 
     @ManyToOne
@@ -38,10 +39,35 @@ public class Car implements HasId<Long> {
     @ToString.Exclude
     private List<ProductCard> productCards = new ArrayList<>();
 
+    public Car() {
+        setModel(new Model());
+    }
+
     public List<RentalRecord> getRentalRecords() {
         return productCards.stream()
-                .map(ProductCard::getRentalRecords)
-                .flatMap(List::stream)
+                .map(ProductCard::getRentalRecord)
                 .toList();
+    }
+
+    public RentalRecord getLastRentalRecord() {
+        return getRentalRecords().stream()
+                .max(Comparator.comparing(RentalRecord::getRentedAt))
+                .orElse(null);
+    }
+
+    public boolean isInUsage() {
+        var rentalRecord = getLastRentalRecord();
+        if (rentalRecord == null) {
+            return false;
+        }
+        return !rentalRecord.isReturned();
+    }
+
+    public String getFullName() {
+        // TEMPORARILY !!!
+        if (getLessor() == null) {
+            return getModel().getFullName() + " by null";
+        }
+        return getModel().getFullName() + " by " + getLessor().getName();
     }
 }

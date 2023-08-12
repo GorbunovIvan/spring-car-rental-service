@@ -32,9 +32,9 @@ public class Renter implements Partaker<Renter> {
 
     public List<Car> getCarsInUsage() {
         return rentalRecords.stream()
-                .filter(RentalRecord::isInLeasing)
                 .map(RentalRecord::getProductCard)
                 .map(ProductCard::getCar)
+                .filter(Car::isInUsage)
                 .toList();
     }
 

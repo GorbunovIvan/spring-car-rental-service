@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class RootController {
 
-    @GetMapping("/hello")
+    @GetMapping("/")
     public String index() {
-        return "hello";
+        return "redirect:/product-cards";
     }
 }

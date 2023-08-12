@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${'updating product-card :: ' + productCard.getCar().getFullName()}">updating product-card :: product card</title>
+</head>
+<body>
+    <div>
+
+        <h4 th:text="${'updating product-card ' + productCard.getCar().getFullName()}">updating product-card</h4>
+
+        <form th:method="PATCH" th:action="@{/product-cards/__${productCard.getId()}__}" th:object="${productCard}">
+
+            <div>
+                <label for="brand-dropdown">Car</label>
+                <select id="brand-dropdown" name="car">
+                    <option th:each="car : ${cars}"
+                            th:value="${car}"
+                            th:text="${car}"
+                            th:selected="${productCard.getCar().getFullName().equals(car)}">
+                        Car
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="price">Price</label>
+                <input id="price" type="number" th:field="*{price}"/>
+                <div style="color:red" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price error</div>
+            </div>
+
+            <div>
+                <label for="address">Address</label>
+                <input id="address" type="text" th:field="*{address}"/>
+                <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address error</div>
+            </div>
+
+            <br/>
+
+            <button type="submit">Update product-card</button>
+
+        </form>
+    </div>
+</body>
+</html>

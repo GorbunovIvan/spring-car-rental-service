@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product-cards</title>
+</head>
+<body>
+    <div>
+        <div th:each="productCard : ${productCards}">
+            <p><a th:href="@{/product-cards/__${productCard.getId()}__}" th:text="${productCard.toString()}">product card</a></p>
+        </div>
+        <div>
+            <p><a href="/product-cards/new">Add new product-card</a></p>
+        </div>
+    </div>
+</body>
+</html>

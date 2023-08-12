@@ -10,13 +10,10 @@ import org.example.entity.user.Lessor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 
 @Entity
 @Table(name = "product_cards")
-@NoArgsConstructor @AllArgsConstructor
+@AllArgsConstructor
 @Getter @Setter
 @ToString
 @EqualsAndHashCode(of = { "car", "createdAt"} )
@@ -31,17 +28,25 @@ public class ProductCard implements HasId<Long> {
     @NotNull
     private Car car;
 
+    @Column(name = "price")
+    @NotNull(message = "price is empty")
+    @Digits(integer = 10, fraction = 2, message = "price is wrong")
+    private BigDecimal price;
+
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinColumn(name = "address_id")
+    @NotNull(message = "address is empty")
+    private Address address;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "price")
-    @NotNull
-    @Digits(integer = 10, fraction = 2)
-    private BigDecimal price;
+    @OneToOne(mappedBy = "productCard")
+    private RentalRecord rentalRecord;
 
-    @OneToMany(mappedBy = "productCard")
-    @OrderBy("rentedAt")
-    private List<RentalRecord> rentalRecords = new ArrayList<>();
+    public ProductCard() {
+        setCar(new Car());
+    }
 
     @PrePersist
     private void init() {
@@ -54,17 +59,11 @@ public class ProductCard implements HasId<Long> {
         return getCar().getLessor();
     }
 
-    public RentalRecord getLastRentalRecord() {
-        return rentalRecords.stream()
-                .max(Comparator.comparing(RentalRecord::getRentedAt))
-                .orElse(null);
+    public String getModelName() {
+        return getCar().getFullName();
     }
 
-    public boolean isInLeasing() {
-        var rentalRecord = getLastRentalRecord();
-        if (rentalRecord == null) {
-            return false;
-        }
-        return rentalRecord.isInLeasing();
+    public boolean isLeased() {
+        return getRentalRecord() != null;
     }
 }

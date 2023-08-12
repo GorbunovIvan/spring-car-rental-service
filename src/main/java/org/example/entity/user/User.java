@@ -20,12 +20,12 @@ public class User implements HasId<Long> {
 
     @Column(name = "username", unique = true)
     @NotNull
-    @Size(min = 5, max = 50)
+    @Size(min = 5, max = 50, message = "username should be in range from 5 to 99 characters long")
     private String username;
 
     @Column(name = "name")
-    @NotNull
-    @Size(min = 1, max = 256)
+    @NotNull(message = "name is empty")
+    @Size(min = 1, max = 256, message = "name is wrong")
     private String name;
 
     @Enumerated(EnumType.STRING)
