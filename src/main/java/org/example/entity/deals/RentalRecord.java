@@ -1,6 +1,7 @@
 package org.example.entity.deals;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.example.entity.HasId;
 import org.example.entity.user.Lessor;
@@ -20,17 +21,15 @@ public class RentalRecord implements HasId<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "product_card")
+    @NotNull
     private ProductCard productCard;
 
     @ManyToOne
     @JoinColumn(name = "renter_id")
+    @NotNull
     private Renter renter;
-
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinColumn(name = "address_id")
-    private Address address;
 
     @Column(name = "rented_at")
     private LocalDateTime rentedAt;
@@ -49,7 +48,7 @@ public class RentalRecord implements HasId<Long> {
         return getProductCard().getLessor();
     }
 
-    public boolean isInLeasing() {
-        return returnedAt == null;
+    public boolean isReturned() {
+        return returnedAt != null;
     }
 }

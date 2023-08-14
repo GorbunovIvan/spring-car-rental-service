@@ -31,6 +31,10 @@ public class Lessor implements Partaker<Lessor> {
     @ToString.Exclude
     private List<Car> cars = new ArrayList<>();
 
+    public String getName() {
+        return getUser().getName();
+    }
+
     public List<ProductCard> getProductCards() {
         return getCars().stream()
                 .map(Car::getProductCards)
@@ -45,8 +49,14 @@ public class Lessor implements Partaker<Lessor> {
                 .toList();
     }
 
+    public List<Car> getCarsInUsage() {
+        return getCars().stream()
+                .filter(Car::isInUsage)
+                .toList();
+    }
+
     @Override
     public Lessor get() {
-        return null;
+        return this;
     }
 }

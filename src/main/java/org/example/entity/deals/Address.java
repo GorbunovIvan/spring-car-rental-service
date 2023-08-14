@@ -7,10 +7,10 @@ import lombok.*;
 import org.example.entity.HasId;
 
 @Entity
-@Table(name = "addresses")
+@Table(name = "addresses",
+        uniqueConstraints = @UniqueConstraint(columnNames = { "country", "town", "street", "building_number" }))
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
-@ToString
 @EqualsAndHashCode
 public class Address implements HasId<Long> {
 
@@ -20,26 +20,41 @@ public class Address implements HasId<Long> {
     private Long id;
 
     @Column(name = "country")
-    @NotNull
-    @Size(min = 1, max = 99)
+    @NotNull(message = "country is empty")
+    @Size(min = 1, max = 99, message = "country is wrong")
     private String country;
 
     @Column(name = "town")
-    @NotNull
-    @Size(min = 1, max = 99)
+    @NotNull(message = "town is empty")
+    @Size(min = 1, max = 99, message = "town is wrong")
     private String town;
 
     @Column(name = "street")
-    @NotNull
-    @Size(min = 1, max = 99)
+    @NotNull(message = "street is empty")
+    @Size(min = 1, max = 99, message = "street is wrong")
     private String street;
 
     @Column(name = "building_number")
-    @NotNull
-    @Size(min = 1, max = 99)
+    @NotNull(message = "building number is empty")
+    @Size(min = 1, max = 99, message = "building number is wrong")
     private String buildingNumber;
 
-    public String getFullAddress() {
+    public Address(String country, String town, String street, String buildingNumber) {
+        this.country = country;
+        this.town = town;
+        this.street = street;
+        this.buildingNumber = buildingNumber;
+    }
+
+    @PrePersist
+    private void init() {
+        setCountry(getCountry().replaceAll(" ", "-"));
+        setTown(getTown().replaceAll(" ", "-"));
+        setStreet(getStreet().replaceAll(" ", "-"));
+    }
+
+    @Override
+    public String toString() {
         return String.format("%s, %s, %s, %s",
                 getCountry(),
                 getTown(),

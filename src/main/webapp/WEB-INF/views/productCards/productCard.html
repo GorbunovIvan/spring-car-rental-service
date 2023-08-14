@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${'product-cards :: ' + productCard.getModelName()}">Product-card</title>
+</head>
+<body>
+    <div>
+        <h4>Product-card</h4>
+        <div>
+            <p> Car: <span th:text="${productCard.getModelName()}">car</span></p>
+            <p> Price: <span th:text="${productCard.getPrice()}">price</span></p>
+            <p> Lessor: <span th:text="${productCard.getLessor()}">lessor</span></p>
+            <p> Address: <span th:text="${productCard.getAddress()}">address</span></p>
+            <p> Posted: <span th:text="${productCard.getCreatedAt()}">created at</span></p>
+        </div>
+        <div>
+            <p><a th:href="@{/product-cards/__${productCard.getId()}__/edit}">Edit</a></p>
+        </div>
+    </div>
+</body>
+</html>

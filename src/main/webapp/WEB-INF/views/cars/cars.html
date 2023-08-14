@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cars</title>
+</head>
+<body>
+    <div>
+        <div th:each="car : ${cars}">
+            <p><a th:href="@{/cars/__${car.getId()}__}" th:text="${car.getFullName()}">car</a></p>
+        </div>
+        <div>
+            <p><a href="/cars/new">Add new car</a></p>
+        </div>
+    </div>
+</body>
+</html>

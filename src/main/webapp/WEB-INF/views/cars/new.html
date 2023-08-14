@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>creating car</title>
+</head>
+<body>
+    <div>
+
+        <h4>New car</h4>
+
+        <form method="POST" action="/cars">
+
+            <div>
+                <label for="brand-dropdown">Brand</label>
+                <select id="brand-dropdown" name="brand">
+                    <option th:each="brand : ${brands}"
+                            th:value="${brand}"
+                            th:text="${brand}"
+                            th:selected="${car.getModel().getCarBrand().getName().equals(brand)}">
+                        Brand
+                    </option>
+                </select>
+                <div th:if="${errors != null && errors.hasFieldErrors('brand')}">
+                    <span style="color:red" th:text="${errors.getFieldError('brand').getCode()}">Brand error</span>
+                    <br/>
+                </div>
+            </div>
+
+            <div>
+                <label for="model">Model</label>
+                <input id="model" type="text" name="model" th:value="${car.getModel().getModelName()}"/>
+                <div th:if="${errors != null && errors.hasFieldErrors('model')}">
+                    <span style="color:red" th:text="${errors.getFieldError('model').getCode()}">Model error</span>
+                    <br/>
+                </div>
+            </div>
+
+            <div>
+                <label for="horse-powers">Horse powers</label>
+                <input id="horse-powers" type="number" name="horsePowers" th:value="${car.getModel().getHorsePowers()}"/>
+                <div th:if="${errors != null && errors.hasFieldErrors('horsePowers')}">
+                    <span style="color:red" th:text="${errors.getFieldError('horsePowers').getCode()}">Horse-powers error</span>
+                    <br/>
+                </div>
+            </div>
+
+            <div>
+                <label for="year">Year</label>
+                <input id="year" type="number" name="year" th:value="${car.getModel().getYear()}"/>
+                <div th:if="${errors != null && errors.hasFieldErrors('year')}">
+                    <span style="color:red" th:text="${errors.getFieldError('year').getCode()}">Year error</span>
+                    <br/>
+                </div>
+            </div>
+
+            <br/>
+
+            <button type="submit">Add new car</button>
+
+        </form>
+
+    </div>
+</body>
+</html>
