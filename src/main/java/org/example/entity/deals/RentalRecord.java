@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Table(name = "rental_records")
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
-@ToString
 @EqualsAndHashCode(of = { "productCard" })
+@ToString
 public class RentalRecord implements HasId<Long> {
 
     @Id

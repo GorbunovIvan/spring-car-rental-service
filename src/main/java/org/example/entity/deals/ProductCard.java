@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 @Table(name = "product_cards")
 @AllArgsConstructor
 @Getter @Setter
-@ToString
 @EqualsAndHashCode(of = { "car", "createdAt"} )
+@ToString
 public class ProductCard implements HasId<Long> {
 
     @Id
@@ -42,6 +42,7 @@ public class ProductCard implements HasId<Long> {
     private LocalDateTime createdAt;
 
     @OneToOne(mappedBy = "productCard")
+    @ToString.Exclude
     private RentalRecord rentalRecord;
 
     public ProductCard() {

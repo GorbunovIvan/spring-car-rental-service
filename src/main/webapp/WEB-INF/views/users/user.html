@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${'users :: ' + user.getName()}">User</title>
+</head>
+<body>
+    <div>
+        <h4>User</h4>
+        <div>
+            <p> Name: <span th:text="${user.getName()}">name</span></p>
+            <p> Username: <span th:text="${user.getUsername()}">username</span></p>
+            <p> Type: <span th:text="${user.getType()}">type</span></p>
+        </div>
+        <div>
+            <p><a th:href="@{/users/__${user.getId()}__/edit}">Edit</a></p>
+        </div>
+    </div>
+</body>
+</html>

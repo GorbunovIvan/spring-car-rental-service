@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+    <div>
+        <div th:each="user : ${users}">
+            <p><a th:href="@{/users/__${user.getId()}__}" th:text="${user.getName()}">user</a></p>
+        </div>
+        <div>
+            <p><a href="/users/register">Register new user</a></p>
+        </div>
+    </div>
+</body>
+</html>

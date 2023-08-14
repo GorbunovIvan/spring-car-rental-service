@@ -47,6 +47,7 @@ public class Address implements HasId<Long> {
     }
 
     @PrePersist
+    @PreUpdate
     private void init() {
         setCountry(getCountry().replaceAll(" ", "-"));
         setTown(getTown().replaceAll(" ", "-"));
