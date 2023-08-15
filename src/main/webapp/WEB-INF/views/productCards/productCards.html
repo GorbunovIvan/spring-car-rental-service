@@ -6,8 +6,11 @@
 </head>
 <body>
     <div>
-        <div th:each="productCard : ${productCards}">
-            <p><a th:href="@{/product-cards/__${productCard.getId()}__}" th:text="${productCard.toString()}">product card</a></p>
+        <div>
+            <div th:each="productCard : ${productCards}">
+                <p><a th:href="@{/product-cards/__${productCard.getId()}__}" th:text="${productCard.toString()}">product card</a></p>
+            </div>
+            <hr/>
         </div>
         <div>
             <p><a href="/product-cards/new">Add new product-card</a></p>

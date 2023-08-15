@@ -3,7 +3,10 @@ package org.example.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.entity.car.Car;
 import org.example.entity.car.CarBrand;
+import org.example.entity.user.User;
+import org.example.entity.user.UserType;
 import org.example.service.CarService;
+import org.example.utils.UsersUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +22,7 @@ import java.util.Objects;
 public class CarController {
 
     private final CarService carService;
+    private final UsersUtil usersUtil;
 
     @GetMapping
     public String getAll(Model model) {
@@ -29,11 +33,21 @@ public class CarController {
     @GetMapping("/{id}")
     public String getById(@PathVariable Long id, Model model) {
         model.addAttribute("car", carService.getById(id));
+        model.addAttribute("currentUser", getCurrentUser());
         return "cars/car";
     }
 
     @GetMapping("/new")
     public String createForm(Model model) {
+
+        var currentUser = getCurrentUser();
+        if (currentUser == null) {
+            return "redirect:/auth/login";
+        }
+        if (currentUser.getType() != UserType.LESSOR) {
+            throw new RuntimeException("You are not lessor to add new car");
+        }
+
         model.addAttribute("car", new Car());
         model.addAttribute("brands", carService.getAllCarBrandNames());
         return "cars/new";
@@ -46,6 +60,14 @@ public class CarController {
                          @RequestParam(value = "horsePowers", required = false) Integer horsePowers,
                          @RequestParam(value = "year", required = false) Integer year) {
 
+        var currentUser = getCurrentUser();
+        if (currentUser == null) {
+            return "redirect:/auth/login";
+        }
+        if (currentUser.getType() != UserType.LESSOR) {
+            throw new RuntimeException("You are not lessor to add new car");
+        }
+
         BindingResult bindingResult = getBindingResultOfFields(carBrand, modelName, horsePowers, year);
 
         Car car = createCarWithFields(carBrand, modelName, horsePowers, year);
@@ -57,6 +79,7 @@ public class CarController {
             return "cars/new";
         }
 
+        car.setLessor(currentUser.getLessor());
         carService.create(car);
 
         return "redirect:/cars";
@@ -64,7 +87,24 @@ public class CarController {
 
     @GetMapping("/{id}/edit")
     public String updateForm(@PathVariable Long id, Model model) {
-        model.addAttribute("car", carService.getById(id));
+
+        var car = carService.getById(id);
+        if (car == null) {
+            throw new RuntimeException("Car with id '" + id + "' does not exist");
+        }
+
+        var currentUser = getCurrentUser();
+        if (currentUser == null) {
+            return "redirect:/auth/login";
+        }
+        if (currentUser.getType() != UserType.LESSOR) {
+            throw new RuntimeException("You are not lessor to edit car");
+        }
+        if (!car.getLessor().equals(currentUser.getLessor())) {
+            throw new RuntimeException("You are trying to update NOT your car");
+        }
+
+        model.addAttribute("car", car);
         model.addAttribute("brands", carService.getAllCarBrandNames());
         return "cars/edit";
     }
@@ -79,6 +119,17 @@ public class CarController {
         var carPersisted = carService.getById(id);
         if (carPersisted == null) {
             throw new RuntimeException("Car with id '" + id + "' does not exist");
+        }
+
+        var currentUser = getCurrentUser();
+        if (currentUser == null) {
+            return "redirect:/auth/login";
+        }
+        if (currentUser.getType() != UserType.LESSOR) {
+            throw new RuntimeException("You are not lessor to update car");
+        }
+        if (!carPersisted.getLessor().equals(currentUser.getLessor())) {
+            throw new RuntimeException("You are trying to update NOT your car");
         }
 
         BindingResult bindingResult = getBindingResultOfFields(carBrand, modelName, horsePowers, year);
@@ -135,5 +186,9 @@ public class CarController {
         car.setModel(carModel);
 
         return car;
+    }
+
+    private User getCurrentUser() {
+        return usersUtil.getCurrentUser();
     }
 }

@@ -8,13 +8,16 @@
     <div>
         <h4>Car</h4>
         <div>
-            <p> Brand: <span th:text="${car.getModel.getCarBrand().getName()}">brand</span></p>
-            <p> Model: <span th:text="${car.getModel.getModelName()}">model</span></p>
-            <p> Horse powers: <span th:text="${car.getModel.getHorsePowers()}">horse powers</span></p>
-            <p> Year: <span th:text="${car.getModel.getYear()}">year</span></p>
+            <p> Brand: <span th:text="${car.getModel().getCarBrand().getName()}">brand</span></p>
+            <p> Model: <span th:text="${car.getModel().getModelName()}">model</span></p>
+            <p> Horse powers: <span th:text="${car.getModel().getHorsePowers()}">horse powers</span></p>
+            <p> Year: <span th:text="${car.getModel().getYear()}">year</span></p>
+            <p> Lessor: <span th:text="${car.getLessor().getName()}">lessor</span></p>
+            <hr/>
         </div>
         <div>
             <p><a th:href="@{/cars/__${car.getId()}__/edit}">Edit</a></p>
+            <hr/>
         </div>
     </div>
 </body>

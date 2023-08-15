@@ -3,6 +3,7 @@ package org.example.repository;
 import org.example.entity.car.Car;
 import org.example.entity.car.CarBrand;
 import org.example.entity.car.Model;
+import org.example.entity.user.Lessor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CarRepository extends JpaRepository<Car, Long> {
+
+    List<Car> findCarsByLessor(Lessor lessor);
 
     @Query("FROM Car cars " +
             "LEFT JOIN FETCH cars.productCards productCards " +

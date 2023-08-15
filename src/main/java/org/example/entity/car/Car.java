@@ -32,6 +32,7 @@ public class Car implements HasId<Long> {
 
     @ManyToOne
     @JoinColumn(name = "lessor_id")
+    @NotNull(message = "lessor is null")
     private Lessor lessor;
 
     @OneToMany(mappedBy = "car")

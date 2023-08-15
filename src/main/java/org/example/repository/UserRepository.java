@@ -9,14 +9,12 @@ import org.springframework.lang.Nullable;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
 
     @Query("FROM User users " +
             "LEFT JOIN FETCH users.lessor lessors " +
             "LEFT JOIN FETCH users.renter renters " +
             "LEFT JOIN FETCH lessors.cars lessors_cars " +
-//            "LEFT JOIN FETCH renters.rentalRecords renters_rentalRecords " +
-//            "LEFT JOIN FETCH lessors_cars.productCards lessors_productCards " +
             "WHERE users.id = :id")
     @NonNull
     Optional<User> findById(@Param("id") @Nullable Long id);

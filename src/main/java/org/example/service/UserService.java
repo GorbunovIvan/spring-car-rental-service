@@ -16,4 +16,9 @@ public class UserService extends BasicService<User, Long> {
     protected JpaRepository<User, Long> getRepository() {
         return userRepository;
     }
+
+    public User getByIdEagerly(Long id) {
+        return userRepository.findByIdEagerly(id)
+                .orElse(null);
+    }
 }

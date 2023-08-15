@@ -6,8 +6,11 @@
 </head>
 <body>
     <div>
-        <div th:each="car : ${cars}">
-            <p><a th:href="@{/cars/__${car.getId()}__}" th:text="${car.getFullName()}">car</a></p>
+        <div>
+            <div th:each="car : ${cars}">
+                <p><a th:href="@{/cars/__${car.getId()}__}" th:text="${car.getFullName()}">car</a></p>
+            </div>
+            <hr/>
         </div>
         <div>
             <p><a href="/cars/new">Add new car</a></p>

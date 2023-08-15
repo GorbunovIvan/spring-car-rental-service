@@ -6,8 +6,11 @@
 </head>
 <body>
     <div>
-        <div th:each="user : ${users}">
-            <p><a th:href="@{/users/__${user.getId()}__}" th:text="${user.getName()}">user</a></p>
+        <div>
+            <div th:each="user : ${users}">
+                <p><a th:href="@{/users/__${user.getId()}__}" th:text="${user.getName()}">user</a></p>
+            </div>
+            <hr/>
         </div>
         <div>
             <p><a href="/users/register">Register new user</a></p>

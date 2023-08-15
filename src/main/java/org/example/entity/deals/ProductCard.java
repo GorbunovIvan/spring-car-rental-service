@@ -67,4 +67,12 @@ public class ProductCard implements HasId<Long> {
     public boolean isLeased() {
         return getRentalRecord() != null;
     }
+
+    public String getFullName() {
+        return String.format("Product-card: %s for %s at %s",
+                getCar().getModel().getFullName(),
+                getPrice(),
+                getAddress());
+
+    }
 }

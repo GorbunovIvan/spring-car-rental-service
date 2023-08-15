@@ -11,9 +11,55 @@
             <p> Name: <span th:text="${user.getName()}">name</span></p>
             <p> Username: <span th:text="${user.getUsername()}">username</span></p>
             <p> Type: <span th:text="${user.getType()}">type</span></p>
+            <hr/>
         </div>
         <div>
             <p><a th:href="@{/users/__${user.getId()}__/edit}">Edit</a></p>
+            <hr/>
+        </div>
+        <div th:if="${user.getType().getName().equals('Lessor')}">
+            <div>
+                <h5>Cars</h5>
+                <div th:each="car : ${user.getLessor().getCars()}">
+                    <a th:href="@{/cars/__${car.getId()}__}" th:text="${car.getModel().getFullName()}">car</a>
+                    <br/>
+                </div>
+                <hr/>
+            </div>
+            <div>
+                <h5>Product-cards</h5>
+                <div th:each="productCard : ${user.getLessor().getProductCards()}">
+                    <a th:href="@{/product-cards/__${productCard.getId()}__}" th:text="${productCard.getFullName()}">product-card</a>
+                    <br/>
+                </div>
+                <hr/>
+            </div>
+            <div>
+                <h5>History of lending</h5>
+                <div th:each="rentalRecord : ${user.getLessor().getRentalRecords()}">
+                    <a th:href="@{/product-cards/__${rentalRecord.getId()}__}" th:text="${rentalRecord}">rental record</a>
+                    <br/>
+                </div>
+                <hr/>
+            </div>
+        </div>
+        <div th:if="${user.getType().getName().equals('Renter')}">
+            <div>
+                <h5>Cars in usage</h5>
+                <div th:each="car : ${user.getRenter().getCarsInUsage()}">
+                    <a th:href="@{/cars/__${car.getId()}__}" th:text="${car.getModel().getFullName()}">car</a>
+                    <br/>
+                </div>
+                <hr/>
+            </div>
+            <div>
+                <h5>History of lending</h5>
+                <div th:each="rentalRecord : ${user.getRenter().getRentalRecords()}">
+                    <a th:href="@{/product-cards/__${rentalRecord.getId()}__}" th:text="${rentalRecord}">rental record</a>
+                    <br/>
+                </div>
+                <hr/>
+            </div>
         </div>
     </div>
 </body>

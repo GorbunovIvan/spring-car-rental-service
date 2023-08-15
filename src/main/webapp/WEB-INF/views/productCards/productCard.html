@@ -10,12 +10,14 @@
         <div>
             <p> Car: <span th:text="${productCard.getModelName()}">car</span></p>
             <p> Price: <span th:text="${productCard.getPrice()}">price</span></p>
-            <p> Lessor: <span th:text="${productCard.getLessor()}">lessor</span></p>
+            <p> Lessor: <span th:text="${productCard.getLessor().getName()}">lessor</span></p>
             <p> Address: <span th:text="${productCard.getAddress()}">address</span></p>
             <p> Posted: <span th:text="${productCard.getCreatedAt()}">created at</span></p>
+            <hr/>
         </div>
         <div>
             <p><a th:href="@{/product-cards/__${productCard.getId()}__/edit}">Edit</a></p>
+            <hr/>
         </div>
     </div>
 </body>
