@@ -20,7 +20,7 @@
         <div th:if="${user.getType().getName().equals('Lessor')}">
             <div>
                 <h5>Cars</h5>
-                <div>
+                <div th:if="${user.equals(currentUser)}">
                     <p><a href="/cars/new">Add new car</a></p>
                 </div>
                 <div th:each="car : ${user.getLessor().getCars()}">
@@ -31,7 +31,7 @@
             </div>
             <div>
                 <h5>Product-cards</h5>
-                <div>
+                <div th:if="${user.equals(currentUser)}">
                     <p><a href="/product-cards/new">Add new product-card</a></p>
                 </div>
                 <div th:each="productCard : ${user.getLessor().getProductCards()}">

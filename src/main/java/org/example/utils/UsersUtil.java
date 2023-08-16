@@ -12,6 +12,7 @@ public class UsersUtil {
     private final UserService userService;
 
     public User getCurrentUser() {
+//        return null;
         return userService.getByIdEagerly(4L); // lessor
 //        return userService.getByIdEagerly(3L); // renter
     }

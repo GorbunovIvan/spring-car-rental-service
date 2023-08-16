@@ -25,7 +25,7 @@ public class ProductCard implements HasId<Long> {
 
     @ManyToOne
     @JoinColumn(name = "car")
-    @NotNull
+    @NotNull(message = "car is empty")
     private Car car;
 
     @Column(name = "price")

@@ -27,12 +27,17 @@ public class CarController {
     @GetMapping
     public String getAll(Model model) {
         model.addAttribute("cars", carService.getAll());
+        model.addAttribute("currentUser", getCurrentUser());
         return "cars/cars";
     }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable Long id, Model model) {
-        model.addAttribute("car", carService.getById(id));
+        var car = carService.getById(id);
+        if (car == null) {
+            return "redirect:/cars";
+        }
+        model.addAttribute("car", car);
         model.addAttribute("currentUser", getCurrentUser());
         return "cars/car";
     }

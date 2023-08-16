@@ -8,9 +8,9 @@
     <div>
         <h4>Product-card</h4>
         <div>
-            <p>Car: <span th:text="${productCard.getModelName()}">car</span></p>
+            <p>Car: <a th:href="@{/cars/__${productCard.getCar().getId()}__}" th:text="${productCard.getModelName()}">car</a></p>
             <p>Price: <span th:text="${productCard.getPrice()}">price</span></p>
-            <p>Lessor: <span th:text="${productCard.getLessor().getName()}">lessor</span></p>
+            <p>Lessor: <a th:href="@{/users/__${productCard.getLessor().getUser().getId()}__}" th:text="${productCard.getLessor().getName()}">lessor</a></p>
             <p>Address: <span th:text="${productCard.getAddress()}">address</span></p>
             <p>Posted: <span th:text="${productCard.getCreatedAt()}">created at</span></p>
             <div th:if="${productCard.isLeased()}">
@@ -18,6 +18,9 @@
                 <div th:if="${productCard.isClosed()}">
                     <p>Returned at: <span th:text="${productCard.getRentalRecord().getReturnedAt()}">returned at</span></p>
                 </div>
+            </div>
+            <div th:unless="${productCard.isLeased()}">
+                <p>Is free</p>
             </div>
             <hr/>
         </div>

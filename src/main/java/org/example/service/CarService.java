@@ -40,9 +40,7 @@ public class CarService extends BasicService<Car, Long> {
             return null;
         }
 
-        // !!! NOT GOOD TO TAKE ALL THE RECORDS !!!
-        return getAll().stream()
-                .filter(car -> car.getModel().equals(model))
+        return carRepository.findAllByModel(model).stream()
                 .filter(car -> car.getLessor().getName().equals(lessorName))
                 .findAny()
                 .orElse(null);

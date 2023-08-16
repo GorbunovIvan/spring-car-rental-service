@@ -29,12 +29,17 @@ public class ProductCardController {
     @GetMapping
     public String getAll(Model model) {
         model.addAttribute("productCards", productCardService.getAllAvailable());
+        model.addAttribute("currentUser", getCurrentUser());
         return "productCards/productCards";
     }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable Long id, Model model) {
-        model.addAttribute("productCard", productCardService.getById(id));
+        var productCard = productCardService.getById(id);
+        if (productCard == null) {
+            return "redirect:/product-cards";
+        }
+        model.addAttribute("productCard", productCard);
         model.addAttribute("currentUser", getCurrentUser());
         return "productCards/productCard";
     }

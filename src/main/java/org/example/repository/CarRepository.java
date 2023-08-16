@@ -17,6 +17,17 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     List<Car> findCarsByLessor(Lessor lessor);
 
     @Query("FROM Car cars " +
+            "LEFT JOIN FETCH cars.productCards productCards")
+    @NonNull
+    List<Car> findAll();
+
+    @Query("FROM Car cars " +
+            "LEFT JOIN FETCH cars.productCards productCards " +
+            "WHERE cars.model = :model")
+    @NonNull
+    List<Car> findAllByModel(@Param("model") Model model);
+
+    @Query("FROM Car cars " +
             "LEFT JOIN FETCH cars.productCards productCards " +
             "WHERE cars.id = :id")
     @NonNull
