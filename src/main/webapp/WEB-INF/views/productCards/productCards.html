@@ -6,10 +6,14 @@
 </head>
 <body>
     <div>
-        <div th:each="productCard : ${productCards}">
-            <p><a th:href="@{/product-cards/__${productCard.getId()}__}" th:text="${productCard.toString()}">product card</a></p>
-        </div>
         <div>
+            <h4>Available product-cards</h4>
+            <div th:each="productCard : ${productCards}">
+                <p><a th:href="@{/product-cards/__${productCard.getId()}__}" th:text="${productCard.getFullName()}">product card</a></p>
+            </div>
+            <hr/>
+        </div>
+        <div th:if="${currentUser != null && currentUser.getType().getName().equals('Lessor')}">
             <p><a href="/product-cards/new">Add new product-card</a></p>
         </div>
     </div>

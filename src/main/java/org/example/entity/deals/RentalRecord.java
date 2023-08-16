@@ -13,15 +13,15 @@ import java.time.LocalDateTime;
 @Table(name = "rental_records")
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
-@ToString
 @EqualsAndHashCode(of = { "productCard" })
+@ToString
 public class RentalRecord implements HasId<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = { CascadeType.REFRESH })
     @JoinColumn(name = "product_card")
     @NotNull
     private ProductCard productCard;
@@ -50,5 +50,19 @@ public class RentalRecord implements HasId<Long> {
 
     public boolean isReturned() {
         return returnedAt != null;
+    }
+
+    public String getFullName() {
+
+        String result = String.format("Rental record: product-card: '%s' rented by '%s' at %s",
+                getProductCard().getFullName(),
+                getRenter().getName(),
+                getRentedAt());
+
+        if (isReturned()) {
+            result += " (returned at " + getReturnedAt() + ")";
+        }
+
+        return result;
     }
 }

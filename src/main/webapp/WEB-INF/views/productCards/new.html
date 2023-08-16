@@ -21,6 +21,7 @@
                         Car
                     </option>
                 </select>
+                <div style="color:red" th:if="${#fields.hasErrors('car')}" th:errors="*{car}">Car error</div>
             </div>
 
             <div>
@@ -31,7 +32,7 @@
 
             <div>
                 <label for="address">Address</label>
-                <input id="address" type="text" th:field="*{address}"/>
+                <input id="address" type="text" th:field="*{address}" placeholder="country, town, street, building-number"/>
                 <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address error</div>
             </div>
 

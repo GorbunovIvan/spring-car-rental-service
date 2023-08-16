@@ -11,6 +11,7 @@ import org.example.entity.user.Lessor;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "cars",
@@ -32,6 +33,7 @@ public class Car implements HasId<Long> {
 
     @ManyToOne
     @JoinColumn(name = "lessor_id")
+    @NotNull(message = "lessor is null")
     private Lessor lessor;
 
     @OneToMany(mappedBy = "car")
@@ -46,6 +48,7 @@ public class Car implements HasId<Long> {
     public List<RentalRecord> getRentalRecords() {
         return productCards.stream()
                 .map(ProductCard::getRentalRecord)
+                .filter(Objects::nonNull)
                 .toList();
     }
 

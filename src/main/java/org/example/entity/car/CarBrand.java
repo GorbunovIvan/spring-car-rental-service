@@ -28,6 +28,7 @@ public class CarBrand implements HasId<Integer> {
     }
 
     @PrePersist
+    @PreUpdate
     private void init() {
         setName(getName().replaceAll(" ", "-"));
     }

@@ -6,10 +6,14 @@
 </head>
 <body>
     <div>
-        <div th:each="car : ${cars}">
-            <p><a th:href="@{/cars/__${car.getId()}__}" th:text="${car.getFullName()}">car</a></p>
-        </div>
         <div>
+            <h4>Cars</h4>
+            <div th:each="car : ${cars}">
+                <p><a th:href="@{/cars/__${car.getId()}__}" th:text="${car.getFullName()}">car</a></p>
+            </div>
+            <hr/>
+        </div>
+        <div th:if="${currentUser != null && currentUser.getType().getName().equals('Lessor')}">
             <p><a href="/cars/new">Add new car</a></p>
         </div>
     </div>

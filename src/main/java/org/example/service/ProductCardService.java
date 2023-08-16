@@ -30,4 +30,9 @@ public class ProductCardService extends BasicService<ProductCard, Long> {
         return productCardRepository.findAddressByFields(country, town, street, buildingNumber)
                 .orElse(new Address(country, town, street, buildingNumber));
     }
+
+    @Override
+    public ProductCard create(ProductCard productCard) {
+        return productCardRepository.merge(productCard);
+    }
 }

@@ -10,7 +10,7 @@ import org.springframework.lang.NonNull;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProductCardRepository extends JpaRepository<ProductCard, Long> {
+public interface ProductCardRepository extends JpaRepository<ProductCard, Long>, ProductCardRepositoryCustom {
 
 //    @Query("FROM ProductCard productCards " +
 //            "LEFT JOIN FETCH productCards.rentalRecord rentalRecords")

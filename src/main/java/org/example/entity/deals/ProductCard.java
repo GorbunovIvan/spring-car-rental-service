@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 @Table(name = "product_cards")
 @AllArgsConstructor
 @Getter @Setter
-@ToString
 @EqualsAndHashCode(of = { "car", "createdAt"} )
+@ToString
 public class ProductCard implements HasId<Long> {
 
     @Id
@@ -25,7 +25,7 @@ public class ProductCard implements HasId<Long> {
 
     @ManyToOne
     @JoinColumn(name = "car")
-    @NotNull
+    @NotNull(message = "car is empty")
     private Car car;
 
     @Column(name = "price")
@@ -41,7 +41,8 @@ public class ProductCard implements HasId<Long> {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToOne(mappedBy = "productCard")
+    @OneToOne(mappedBy = "productCard", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ToString.Exclude
     private RentalRecord rentalRecord;
 
     public ProductCard() {
@@ -65,5 +66,17 @@ public class ProductCard implements HasId<Long> {
 
     public boolean isLeased() {
         return getRentalRecord() != null;
+    }
+
+    public boolean isClosed() {
+        return isLeased() && getRentalRecord().isReturned();
+    }
+
+    public String getFullName() {
+        return String.format("Product-card: %s for %s at %s",
+                getCar().getModel().getFullName(),
+                getPrice(),
+                getAddress());
+
     }
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>registration new user</title>
+    <script>
+        const radioLessor = document.getElementById('radio-lessor');
+        const radioRenter = document.getElementById('radio-renter');
+
+        radioLessor.addEventListener('change', () => {
+            radioRenter.checked = !radioLessor.checked;
+        });
+
+        radioRenter.addEventListener('change', () => {
+            radioLessor.checked = !radioRenter.checked;
+        });
+    </script>
+</head>
+<body>
+    <div>
+
+        <h4>Registration new user</h4>
+
+        <form method="POST" action="/users/register" th:object="${user}">
+
+            <div class="type-toggle-switch">
+                <input type="radio" id="radio-lessor" name="userType" value="Lessor" th:checked="${user.getType() != null && user.getType().getName().equals('Lessor')}">
+                <label for="radio-lessor">Lessor</label>
+
+                <input type="radio" id="radio-renter" name="userType" value="Renter" th:checked="${user.getType() != null && user.getType().getName().equals('Renter')}">
+                <label for="radio-renter">Renter</label>
+
+                <div style="color:red" th:if="${#fields.hasErrors('type')}">Type is not chosen</div>
+            </div>
+
+            <div>
+                <label for="username">Username</label>
+                <input id="username" type="text" th:field="*{username}"/>
+                <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>
+            </div>
+
+            <div>
+                <label for="name">Name</label>
+                <input id="name" type="text" th:field="*{name}"/>
+                <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+            </div>
+
+            <br/>
+
+            <button type="submit">Register</button>
+
+        </form>
+
+    </div>
+</body>
+</html>

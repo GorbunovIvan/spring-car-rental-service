@@ -3,6 +3,7 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import org.example.entity.car.Car;
 import org.example.entity.car.CarBrand;
+import org.example.entity.user.Lessor;
 import org.example.repository.CarRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,12 @@ public class CarService extends BasicService<Car, Long> {
         return carRepository;
     }
 
-    public List<String> getAllNames() {
-        return getAll().stream()
+    public List<Car> getAllByLessor(Lessor lessor) {
+        return carRepository.findCarsByLessor(lessor);
+    }
+
+    public List<String> getAllNamesByLessor(Lessor lessor) {
+        return getAllByLessor(lessor).stream()
                 .map(Car::getFullName)
                 .toList();
     }
@@ -35,10 +40,8 @@ public class CarService extends BasicService<Car, Long> {
             return null;
         }
 
-        // !!! NOT GOOD TO TAKE ALL THE RECORDS !!!
-        return getAll().stream()
-                .filter(car -> car.getModel().equals(model))
-//                .filter(car -> car.getLessor().getName().equals(lessorName))
+        return carRepository.findAllByModel(model).stream()
+                .filter(car -> car.getLessor().getName().equals(lessorName))
                 .findAny()
                 .orElse(null);
     }

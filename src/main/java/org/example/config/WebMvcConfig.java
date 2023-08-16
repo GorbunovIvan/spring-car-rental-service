@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.controller.converters.AddressConverter;
 import org.example.controller.converters.CarBrandConverter;
 import org.example.controller.converters.CarConverter;
+import org.example.controller.converters.UserTypeConverter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,6 +30,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final CarConverter carConverter;
     private final CarBrandConverter carBrandConverter;
     private final AddressConverter addressConverter;
+    private final UserTypeConverter userTypeConverter;
 
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
@@ -59,5 +61,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addConverter(carConverter);
         registry.addConverter(carBrandConverter);
         registry.addConverter(addressConverter);
+        registry.addConverter(userTypeConverter);
     }
 }
