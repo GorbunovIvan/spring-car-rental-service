@@ -8,16 +8,42 @@
     <div>
         <h4>Product-card</h4>
         <div>
-            <p> Car: <span th:text="${productCard.getModelName()}">car</span></p>
-            <p> Price: <span th:text="${productCard.getPrice()}">price</span></p>
-            <p> Lessor: <span th:text="${productCard.getLessor().getName()}">lessor</span></p>
-            <p> Address: <span th:text="${productCard.getAddress()}">address</span></p>
-            <p> Posted: <span th:text="${productCard.getCreatedAt()}">created at</span></p>
+            <p>Car: <span th:text="${productCard.getModelName()}">car</span></p>
+            <p>Price: <span th:text="${productCard.getPrice()}">price</span></p>
+            <p>Lessor: <span th:text="${productCard.getLessor().getName()}">lessor</span></p>
+            <p>Address: <span th:text="${productCard.getAddress()}">address</span></p>
+            <p>Posted: <span th:text="${productCard.getCreatedAt()}">created at</span></p>
+            <div th:if="${productCard.isLeased()}">
+                <p>Rented at: <span th:text="${productCard.getRentalRecord().getRentedAt()}">rented at</span> by <a th:href="@{/users/__${productCard.getRentalRecord().getRenter().getUser().getId()}__}" th:text="${productCard.getRentalRecord().getRenter().getName()}">renter</a></p>
+                <div th:if="${productCard.isClosed()}">
+                    <p>Returned at: <span th:text="${productCard.getRentalRecord().getReturnedAt()}">returned at</span></p>
+                </div>
+            </div>
             <hr/>
         </div>
         <div>
-            <p><a th:href="@{/product-cards/__${productCard.getId()}__/edit}">Edit</a></p>
-            <hr/>
+            <div th:if="${currentUser != null && productCard.getLessor().equals(currentUser.getLessor())}">
+                <div th:unless="${productCard.isLeased()}">
+                    <p><a th:href="@{/product-cards/__${productCard.getId()}__/edit}">Edit product-card</a></p>
+                    <form th:method="DELETE" th:action="@{/product-cards/__${productCard.getId()}__}">
+                        <button type="submit">Delete product-card</button>
+                    </form>
+                </div>
+                <hr/>
+            </div>
+            <div th:if="${currentUser != null && currentUser.getType().getName().equals('Renter')}">
+                <div th:if="${!productCard.isLeased()}">
+                    <form th:method="POST" th:action="@{/product-cards/__${productCard.getId()}__/rent}">
+                        <button type="submit">Rent a car</button>
+                    </form>
+                </div>
+                <div th:if="${productCard.isLeased() && !productCard.isClosed()}">
+                    <form th:method="PATCH" th:action="@{/product-cards/__${productCard.getId()}__/return}">
+                        <button type="submit">Return a car</button>
+                    </form>
+                </div>
+                <hr/>
+            </div>
         </div>
     </div>
 </body>

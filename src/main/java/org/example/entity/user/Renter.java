@@ -38,10 +38,14 @@ public class Renter implements Partaker<Renter> {
 
     public List<Car> getCarsInUsage() {
         return rentalRecords.stream()
+                .filter(r -> !r.isReturned())
                 .map(RentalRecord::getProductCard)
                 .map(ProductCard::getCar)
-                .filter(Car::isInUsage)
                 .toList();
+    }
+
+    public String getName() {
+        return getUser().getName();
     }
 
     @Override

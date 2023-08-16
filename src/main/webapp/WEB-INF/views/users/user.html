@@ -20,6 +20,9 @@
         <div th:if="${user.getType().getName().equals('Lessor')}">
             <div>
                 <h5>Cars</h5>
+                <div>
+                    <p><a href="/cars/new">Add new car</a></p>
+                </div>
                 <div th:each="car : ${user.getLessor().getCars()}">
                     <a th:href="@{/cars/__${car.getId()}__}" th:text="${car.getModel().getFullName()}">car</a>
                     <br/>
@@ -28,6 +31,9 @@
             </div>
             <div>
                 <h5>Product-cards</h5>
+                <div>
+                    <p><a href="/product-cards/new">Add new product-card</a></p>
+                </div>
                 <div th:each="productCard : ${user.getLessor().getProductCards()}">
                     <a th:href="@{/product-cards/__${productCard.getId()}__}" th:text="${productCard.getFullName()}">product-card</a>
                     <br/>
@@ -37,7 +43,7 @@
             <div>
                 <h5>History of lending</h5>
                 <div th:each="rentalRecord : ${user.getLessor().getRentalRecords()}">
-                    <a th:href="@{/product-cards/__${rentalRecord.getId()}__}" th:text="${rentalRecord}">rental record</a>
+                    <a th:href="@{/product-cards/__${rentalRecord.getProductCard().getId()}__}" th:text="${rentalRecord.getFullName()}">rental record</a>
                     <br/>
                 </div>
                 <hr/>
@@ -55,7 +61,7 @@
             <div>
                 <h5>History of lending</h5>
                 <div th:each="rentalRecord : ${user.getRenter().getRentalRecords()}">
-                    <a th:href="@{/product-cards/__${rentalRecord.getId()}__}" th:text="${rentalRecord}">rental record</a>
+                    <a th:href="@{/product-cards/__${rentalRecord.getProductCard().getId()}__}" th:text="${rentalRecord.getFullName()}">rental record</a>
                     <br/>
                 </div>
                 <hr/>

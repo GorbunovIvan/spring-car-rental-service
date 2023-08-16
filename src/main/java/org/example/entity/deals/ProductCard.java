@@ -41,7 +41,7 @@ public class ProductCard implements HasId<Long> {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToOne(mappedBy = "productCard")
+    @OneToOne(mappedBy = "productCard", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @ToString.Exclude
     private RentalRecord rentalRecord;
 
@@ -66,6 +66,10 @@ public class ProductCard implements HasId<Long> {
 
     public boolean isLeased() {
         return getRentalRecord() != null;
+    }
+
+    public boolean isClosed() {
+        return isLeased() && getRentalRecord().isReturned();
     }
 
     public String getFullName() {
