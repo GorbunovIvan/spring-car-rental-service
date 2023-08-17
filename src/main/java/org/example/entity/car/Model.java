@@ -13,8 +13,8 @@ import java.util.List;
 @Table(name = "models")
 @AllArgsConstructor
 @Getter @Setter
-@ToString
 @EqualsAndHashCode(of = { "carBrand", "modelName", "year", "horsePowers" })
+@ToString
 public class Model implements HasId<Long> {
 
     @Id

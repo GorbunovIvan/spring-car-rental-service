@@ -10,8 +10,8 @@ import org.example.entity.HasId;
 @Table(name = "car_brands")
 @AllArgsConstructor
 @Getter @Setter
-@ToString
 @EqualsAndHashCode(of = "name")
+@ToString
 public class CarBrand implements HasId<Integer> {
 
     @Id

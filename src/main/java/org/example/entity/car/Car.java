@@ -18,8 +18,8 @@ import java.util.Objects;
         uniqueConstraints = @UniqueConstraint(columnNames = { "model_id", "lessor_id" }))
 @AllArgsConstructor
 @Getter @Setter
-@ToString
 @EqualsAndHashCode(of = { "model", "lessor" })
+@ToString
 public class Car implements HasId<Long> {
 
     @Id
@@ -35,6 +35,10 @@ public class Car implements HasId<Long> {
     @JoinColumn(name = "lessor_id")
     @NotNull(message = "lessor is null")
     private Lessor lessor;
+
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "car")
     @OrderBy("createdAt")

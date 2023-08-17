@@ -3,6 +3,7 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import org.example.entity.car.Car;
 import org.example.entity.car.CarBrand;
+import org.example.entity.car.Image;
 import org.example.entity.user.Lessor;
 import org.example.repository.CarRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -59,5 +60,10 @@ public class CarService extends BasicService<Car, Long> {
         return getAllCarBrands().stream()
                 .map(CarBrand::getName)
                 .toList();
+    }
+
+    public Image getImageById(Long id) {
+        return carRepository.findImageById(id)
+                .orElse(null);
     }
 }

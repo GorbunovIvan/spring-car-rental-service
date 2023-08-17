@@ -45,25 +45,6 @@ public class User implements HasId<Long> {
     @ToString.Exclude
     private Renter renter;
 
-    public Partaker<?> getPartaker() {
-
-        if (id == null && type == null) {
-            if (lessor != null) {
-                type = UserType.LESSOR;
-            } else if (renter != null) {
-                type = UserType.RENTER;
-            }
-        }
-
-        if (type == UserType.LESSOR) {
-            return getLessor();
-        } else if (type == UserType.RENTER) {
-            return getRenter();
-        }
-
-        return null;
-    }
-
     @PrePersist
     @PreUpdate
     private void init() {

@@ -1,4 +1,4 @@
-<Configuration name="ConfigTest" status="WARN" monitorInterval="5">
+<Configuration name="ConfigLogs" status="WARN" monitorInterval="5">
 
     <Appenders>
         <!-- Console -->
