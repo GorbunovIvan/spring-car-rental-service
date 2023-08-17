@@ -9,7 +9,7 @@
 
         <h4>New car</h4>
 
-        <form method="POST" action="/cars">
+        <form method="POST" action="/cars"> <!--enctype="multipart/form-data">-->
 
             <div>
                 <label for="brand-dropdown">Brand</label>
@@ -53,6 +53,41 @@
                     <br/>
                 </div>
             </div>
+
+<!--            <div>-->
+<!--                <div>-->
+<!--                    <label for="image1">Image 1</label>-->
+<!--                    <div th:if="${carImages.get(0).getId() == null}">-->
+<!--                        <input id="image1" type="file" name="image1"/>-->
+<!--                    </div>-->
+<!--                    <div th:unless="${carImages.get(0).getId() == null}">-->
+<!--                        <img th:src="${'/images/' + carImages.get(0).getId()}" th:alt="${carImages.get(0).getName()}" height="60px"/>-->
+<!--                        <input id="image1" type="file" name="image1" th:value="${carImages.get(0).getName()}"/>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div>-->
+<!--                    <label for="image2">Image 2</label>-->
+<!--                    <div th:if="${carImages.get(1).getId() == null}">-->
+<!--                        <input id="image2" type="file" name="image2"/>-->
+<!--                    </div>-->
+<!--                    <div th:unless="${carImages.get(1).getId() == null}">-->
+<!--                        <img th:src="${'/images/' + carImages.get(1).getId()}" th:alt="${carImages.get(1).getName()}" height="60px"/>-->
+<!--                        <input id="image2" type="file" name="image2" th:value="${carImages.get(1).getName()}"/>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div>-->
+<!--                    <label for="image3">Image 3</label>-->
+<!--                    <div th:if="${carImages.get(2).getId() == null}">-->
+<!--                        <input id="image3" type="file" name="image3"/>-->
+<!--                    </div>-->
+<!--                    <div th:unless="${carImages.get(2).getId() == null}">-->
+<!--                        <img th:src="${'/images/' + carImages.get(2).getId()}" th:alt="${carImages.get(2).getName()}" height="60px"/>-->
+<!--                        <input id="image3" type="file" name="image3" th:value="${carImages.get(2).getName()}"/>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
 
             <br/>
 

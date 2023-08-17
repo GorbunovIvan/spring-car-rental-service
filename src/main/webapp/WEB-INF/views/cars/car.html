@@ -14,6 +14,9 @@
             <p> Year: <span th:text="${car.getModel().getYear()}">year</span></p>
             <p>Lessor: <a th:href="@{/users/__${car.getLessor().getUser().getId()}__}" th:text="${car.getLessor().getName()}">lessor</a></p>
             <p> In usage: <span th:text="${car.isInUsage()}">is in usage</span></p>
+            <div th:each="image : ${carImages}">
+                <img th:src="${'/images/' + image.getId()}" th:alt="${image.getName()}" height="60px"/>
+            </div>
             <hr/>
         </div>
         <div>

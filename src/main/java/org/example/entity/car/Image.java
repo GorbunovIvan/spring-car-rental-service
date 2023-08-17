@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.example.entity.HasId;
 
 import java.util.Objects;
 
@@ -14,7 +15,7 @@ import java.util.Objects;
 @Getter @Setter
 @EqualsAndHashCode(of = { "car", "name", "originalFileName" })
 @ToString
-public class Image {
+public class Image implements HasId<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

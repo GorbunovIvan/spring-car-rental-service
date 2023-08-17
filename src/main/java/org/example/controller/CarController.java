@@ -3,18 +3,21 @@ package org.example.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.entity.car.Car;
 import org.example.entity.car.CarBrand;
+import org.example.entity.car.Image;
 import org.example.entity.user.User;
 import org.example.entity.user.UserType;
 import org.example.service.CarService;
+import org.example.service.ImageService;
 import org.example.utils.UsersUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.MapBindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/cars")
@@ -22,6 +25,8 @@ import java.util.Objects;
 public class CarController {
 
     private final CarService carService;
+    private final ImageService imageService;
+
     private final UsersUtil usersUtil;
 
     @GetMapping
@@ -38,6 +43,7 @@ public class CarController {
             return "redirect:/cars";
         }
         model.addAttribute("car", car);
+        model.addAttribute("carImages", getCollectionOfImagesForCar(car));
         model.addAttribute("currentUser", getCurrentUser());
         return "cars/car";
     }
@@ -54,6 +60,7 @@ public class CarController {
         }
 
         model.addAttribute("car", new Car());
+        model.addAttribute("carImages", getCollectionOfImagesForCar(null, 3));
         model.addAttribute("brands", carService.getAllCarBrandNames());
         return "cars/new";
     }
@@ -63,7 +70,10 @@ public class CarController {
                          @RequestParam(value = "brand", required = false) CarBrand carBrand,
                          @RequestParam(value = "model", required = false) String modelName,
                          @RequestParam(value = "horsePowers", required = false) Integer horsePowers,
-                         @RequestParam(value = "year", required = false) Integer year) {
+                         @RequestParam(value = "year", required = false) Integer year,
+                         @RequestParam(value = "image1", required = false) MultipartFile image1,
+                         @RequestParam(value = "image2", required = false) MultipartFile image2,
+                         @RequestParam(value = "image3", required = false) MultipartFile image3) {
 
         var currentUser = getCurrentUser();
         if (currentUser == null) {
@@ -80,12 +90,16 @@ public class CarController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult);
             model.addAttribute("car", car);
+            model.addAttribute("carImages", getCollectionOfImagesForCar(car, 3));
             model.addAttribute("brands", carService.getAllCarBrandNames());
             return "cars/new";
         }
 
         car.setLessor(currentUser.getLessor());
-        carService.create(car);
+        car = carService.create(car);
+
+        var images = filesToList(image1, image2, image3);
+        imageService.addImagesToCar(car, images);
 
         return "redirect:/cars";
     }
@@ -110,6 +124,7 @@ public class CarController {
         }
 
         model.addAttribute("car", car);
+        model.addAttribute("carImages", getCollectionOfImagesForCar(car, 3));
         model.addAttribute("brands", carService.getAllCarBrandNames());
         return "cars/edit";
     }
@@ -119,7 +134,10 @@ public class CarController {
                          @RequestParam(value = "brand", required = false) CarBrand carBrand,
                          @RequestParam(value = "model", required = false) String modelName,
                          @RequestParam(value = "horsePowers", required = false) Integer horsePowers,
-                         @RequestParam(value = "year", required = false) Integer year) {
+                         @RequestParam(value = "year", required = false) Integer year,
+                         @RequestParam(value = "image1", required = false) MultipartFile image1,
+                         @RequestParam(value = "image2", required = false) MultipartFile image2,
+                         @RequestParam(value = "image3", required = false) MultipartFile image3) {
 
         var carPersisted = carService.getById(id);
         if (carPersisted == null) {
@@ -145,13 +163,16 @@ public class CarController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult);
             model.addAttribute("car", car);
+            model.addAttribute("carImages", getCollectionOfImagesForCar(car, 3));
             model.addAttribute("brands", carService.getAllCarBrandNames());
             return "cars/edit";
         }
 
         carPersisted.setModel(car.getModel());
+        carPersisted = carService.update(id, carPersisted);
 
-        carService.update(id, carPersisted);
+        var images = filesToList(image1, image2, image3);
+        imageService.addImagesToCar(carPersisted, images);
 
         return "redirect:/cars/" + id;
     }
@@ -191,6 +212,46 @@ public class CarController {
         car.setModel(carModel);
 
         return car;
+    }
+
+    private List<Image> getCollectionOfImagesForCar(Car car) {
+
+        if (car == null) {
+            return new ArrayList<>();
+        }
+
+        return imageService.getAllByCar(car);
+    }
+
+    private List<Image> getCollectionOfImagesForCar(Car car, int numberOfImages) {
+
+        if (car == null) {
+            var images = new ArrayList<Image>();
+            for (int i = 0; i < numberOfImages; i++) {
+                images.add(new Image());
+            }
+            return images;
+        }
+
+        List<Image> images = imageService.getAllByCar(car);
+
+        while (images.size() < numberOfImages) {
+            images.add(new Image());
+        }
+
+        if (images.size() > numberOfImages) {
+            images = images.stream()
+                        .limit(numberOfImages)
+                        .toList();
+        }
+
+        return images;
+    }
+
+    private List<MultipartFile> filesToList(MultipartFile... files) {
+        return Arrays.stream(files)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     private User getCurrentUser() {
