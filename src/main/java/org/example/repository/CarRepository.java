@@ -2,6 +2,7 @@ package org.example.repository;
 
 import org.example.entity.car.Car;
 import org.example.entity.car.CarBrand;
+import org.example.entity.car.Image;
 import org.example.entity.car.Model;
 import org.example.entity.user.Lessor;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -46,4 +47,8 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     Optional<Model> findModelByMainFields(@Param("carBrand") String carBrand,
                                           @Param("modelName") String modelName,
                                           @Param("year") int year);
+
+
+    @Query("FROM Image WHERE id = :id")
+    Optional<Image> findImageById(@Param("id") Long id);
 }

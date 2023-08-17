@@ -3,6 +3,7 @@ package org.example.entity.user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.example.entity.HasId;
 import org.example.entity.car.Car;
 import org.example.entity.deals.ProductCard;
 import org.example.entity.deals.RentalRecord;
@@ -16,7 +17,7 @@ import java.util.List;
 @Getter @Setter
 @EqualsAndHashCode(of = "user")
 @ToString
-public class Renter implements Partaker<Renter> {
+public class Renter implements HasId<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,10 +47,5 @@ public class Renter implements Partaker<Renter> {
 
     public String getName() {
         return getUser().getName();
-    }
-
-    @Override
-    public Renter get() {
-        return this;
     }
 }
