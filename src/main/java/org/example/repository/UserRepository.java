@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
 
     @Query("FROM User users " +
+            "LEFT JOIN FETCH users.roles roles " +
             "LEFT JOIN FETCH users.lessor lessors " +
             "LEFT JOIN FETCH users.renter renters " +
             "LEFT JOIN FETCH lessors.cars lessors_cars " +

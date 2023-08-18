@@ -21,9 +21,11 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Override
     public Optional<User> findByIdEagerly(Long id) {
 
         User user = entityManager.createQuery("FROM User users " +
+                        "LEFT JOIN FETCH users.roles roles " +
                         "LEFT JOIN FETCH users.lessor lessors " +
                         "LEFT JOIN FETCH users.renter renters " +
                         "LEFT JOIN FETCH lessors.cars lessors_cars " +
@@ -37,16 +39,47 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
             return Optional.empty();
         }
 
+        addAdditionalTablesToUser(user);
+
+        return Optional.of(user);
+    }
+
+    @Override
+    public Optional<User> findByUsernameEagerly(String username) {
+
+        User user = entityManager.createQuery("FROM User users " +
+                        "LEFT JOIN FETCH users.roles roles " +
+                        "LEFT JOIN FETCH users.lessor lessors " +
+                        "LEFT JOIN FETCH users.renter renters " +
+                        "LEFT JOIN FETCH lessors.cars lessors_cars " +
+                        "WHERE users.username = :username", User.class)
+                .setParameter("username", username)
+                .getResultList().stream()
+                .findAny()
+                .orElse(null);
+
+        if (user == null) {
+            return Optional.empty();
+        }
+
+        addAdditionalTablesToUser(user);
+
+        return Optional.of(user);
+    }
+
+    private void addAdditionalTablesToUser(User user) {
+
         // Other tables are fetched with different queries (one for lessor and one to renter)
         // because in one general query it shows error - "Could not generate fetch : org.example.entity.user.User(users) -> lessor"
         // I don't know why this error occurs
+
         if (user.getType() == UserType.LESSOR) {
 
             var lessor = user.getLessor();
 
             Map<Car, List<ProductCard>> productCards = entityManager.createQuery(
-                    "FROM ProductCard productCards " +
-                           "WHERE productCards.car.lessor = :lessor", ProductCard.class)
+                            "FROM ProductCard productCards " +
+                                    "WHERE productCards.car.lessor = :lessor", ProductCard.class)
                     .setParameter("lessor", lessor)
                     .getResultList().stream()
                     .collect(Collectors.groupingBy(ProductCard::getCar, Collectors.toList()));
@@ -65,13 +98,11 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
             List<RentalRecord> rentalRecords = entityManager.createQuery(
                             "FROM RentalRecord rentalRecord " +
-                                   "WHERE rentalRecord.renter = :renter", RentalRecord.class)
+                                    "WHERE rentalRecord.renter = :renter", RentalRecord.class)
                     .setParameter("renter", renter)
                     .getResultList();
 
             renter.setRentalRecords(rentalRecords);
         }
-
-        return Optional.of(user);
     }
 }

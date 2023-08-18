@@ -13,7 +13,7 @@
             <p> Type: <span th:text="${user.getType()}">type</span></p>
             <hr/>
         </div>
-        <div>
+        <div th:if="${user.equals(currentUser)}">
             <p><a th:href="@{/users/__${user.getId()}__/edit}">Edit</a></p>
             <hr/>
         </div>

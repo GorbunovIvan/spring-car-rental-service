@@ -5,8 +5,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.example.entity.HasId;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -14,7 +19,7 @@ import java.time.LocalDate;
 @Getter @Setter
 @EqualsAndHashCode(of = "username")
 @ToString
-public class User implements HasId<Long> {
+public class User implements HasId<Long>, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +29,11 @@ public class User implements HasId<Long> {
     @NotNull(message = "username is empty")
     @Size(min = 5, max = 50, message = "username should be in range from 5 to 99 characters long")
     private String username;
+
+    @Column(name = "password")
+    @NotNull(message = "password is empty")
+    @Size(min = 6, message = "password should not be less than 6 characters long")
+    private String password;
 
     @Column(name = "name")
     @NotNull(message = "name is empty")
@@ -37,6 +47,15 @@ public class User implements HasId<Long> {
     @Column(name = "created_at")
     private LocalDate createdAt;
 
+    @ElementCollection(targetClass = Role.class)
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    @ToString.Exclude
+    private Set<Role> roles = new HashSet<>();
+
+    @Column(name = "is_active")
+    private Boolean isActive;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @ToString.Exclude
     private Lessor lessor;
@@ -48,11 +67,9 @@ public class User implements HasId<Long> {
     @PrePersist
     @PreUpdate
     private void init() {
-
         if (createdAt == null) {
             createdAt = LocalDate.now();
         }
-
         checkAndConfigureType();
     }
 
@@ -92,5 +109,35 @@ public class User implements HasId<Long> {
                 setRenter(new Renter(this));
             }
         }
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    // Security
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return getIsActive();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return getIsActive();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return getIsActive();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return getIsActive();
     }
 }
