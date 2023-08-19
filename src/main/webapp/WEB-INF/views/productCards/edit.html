@@ -6,6 +6,8 @@
 </head>
 <body>
     <div>
+        
+        <div th:include="fragments/menu :: commonMenu"></div>
 
         <h4 th:text="${'updating product-card ' + productCard.getCar().getFullName()}">updating product-card</h4>
 

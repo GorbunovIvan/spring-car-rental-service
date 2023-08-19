@@ -7,6 +7,8 @@
 <body>
     <div>
 
+        <div th:include="fragments/menu :: commonMenu"></div>
+
         <h4>New product-card</h4>
 
         <form method="POST" action="/product-cards" th:object="${productCard}">
