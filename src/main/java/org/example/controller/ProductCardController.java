@@ -133,6 +133,12 @@ public class ProductCardController {
             throw new RuntimeException("You are trying to update NOT your product-card");
         }
 
+        if (productCardPersisted.getCar() != null) {
+            if (productCardPersisted.getCar().isInUsage()) {
+                bindingResult.rejectValue("car", "car is in usage already");
+            }
+        }
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("productCard", productCard);
             model.addAttribute("cars", carService.getAllNamesByLessor(currentUser.getLessor()));
@@ -205,12 +211,16 @@ public class ProductCardController {
 
         var currentUser = getCurrentUser();
         if (currentUser.getType() != UserType.RENTER) {
-            throw new RuntimeException("You are not renter to rent a car");
+            throw new RuntimeException("You are not renter");
         }
 
         var rentalRecord = productCard.getRentalRecord();
-        if (!currentUser.getRenter().getRentalRecords().contains(rentalRecord)) {
+        if (!rentalRecord.getRenter().equals(currentUser.getRenter())) {
             throw new RuntimeException("You did not rent this car");
+        }
+
+        if (rentalRecord.isReturned()) {
+            throw new RuntimeException("This car was already returned at " + rentalRecord.getReturnedAt());
         }
 
         rentalRecord.setReturnedAt(LocalDateTime.now());

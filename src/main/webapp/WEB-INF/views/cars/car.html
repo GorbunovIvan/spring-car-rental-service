@@ -6,6 +6,7 @@
 </head>
 <body>
     <div>
+        <div th:include="fragments/menu :: commonMenu"></div>
         <h4>Car</h4>
         <div>
             <p> Brand: <span th:text="${car.getModel().getCarBrand().getName()}">brand</span></p>

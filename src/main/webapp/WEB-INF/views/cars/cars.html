@@ -6,6 +6,7 @@
 </head>
 <body>
     <div>
+        <div th:include="fragments/menu :: commonMenu"></div>
         <div>
             <h4>Cars</h4>
             <div th:each="car : ${cars}">

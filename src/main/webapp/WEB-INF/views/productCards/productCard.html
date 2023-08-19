@@ -6,6 +6,7 @@
 </head>
 <body>
     <div>
+        <div th:include="fragments/menu :: commonMenu"></div>
         <h4>Product-card</h4>
         <div>
             <p>Car: <a th:href="@{/cars/__${productCard.getCar().getId()}__}" th:text="${productCard.getModelName()}">car</a></p>
