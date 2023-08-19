@@ -47,6 +47,7 @@ public class Car implements HasId<Long> {
 
     public Car() {
         setModel(new Model());
+        setLessor(new Lessor());
     }
 
     public List<RentalRecord> getRentalRecords() {
@@ -71,10 +72,6 @@ public class Car implements HasId<Long> {
     }
 
     public String getFullName() {
-        // TEMPORARILY !!!
-        if (getLessor() == null) {
-            return getModel().getFullName() + " by null";
-        }
         return getModel().getFullName() + " by " + getLessor().getName();
     }
 }
