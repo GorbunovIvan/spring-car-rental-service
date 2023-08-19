@@ -6,6 +6,7 @@ import org.example.entity.user.User;
 import org.example.entity.user.UserType;
 import org.example.service.UserService;
 import org.example.utils.UsersUtil;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,11 +20,21 @@ public class UserController {
     private final UserService userService;
 
     private final UsersUtil usersUtil;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping
     public String getAll(Model model) {
         model.addAttribute("users", userService.getAll());
         return "users/users";
+    }
+
+    @GetMapping("/my-page")
+    public String myPage() {
+        var user = getCurrentUser();
+        if (user == null) {
+            return "redirect:/auth/login";
+        }
+        return "redirect:/users/" + user.getId();
     }
 
     @GetMapping("/{id}")
@@ -37,51 +48,25 @@ public class UserController {
         return "users/user";
     }
 
-    @GetMapping("/register")
-    public String registerForm(Model model) {
-        model.addAttribute("user", new User());
-        return "users/registration";
-    }
-
-    @PostMapping("/register")
-    public String register(Model model,
-                         @ModelAttribute @Valid User user, BindingResult bindingResult,
-                         @RequestParam(name = "userType", required = false) UserType userType) {
-
-        if (userType== null) {
-            bindingResult.rejectValue("type", "type is not chosen");
-        }
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("user", user);
-            return "users/registration";
-        }
-
-        user.setType(userType);
-
-        userService.create(user);
-
-        return "redirect:/users";
-    }
-
     @GetMapping("/{id}/edit")
     public String updateForm(@PathVariable Long id, Model model) {
 
         var currentUser = getCurrentUser();
-        if (!currentUser.getId().equals(id)) {
+        if (currentUser == null || !currentUser.getId().equals(id)) {
             return "redirect:/auth/login";
         }
 
-        model.addAttribute("user", userService.getById(id));
+        model.addAttribute("user", currentUser);
         return "users/edit";
     }
 
     @PatchMapping("/{id}")
     public String update(@PathVariable Long id, Model model,
-                         @ModelAttribute @Valid User user, BindingResult bindingResult) {
+                         @ModelAttribute @Valid User user, BindingResult bindingResult,
+                         @RequestParam(name = "userType", required = false) UserType userType) {
 
         var currentUser = getCurrentUser();
-        if (!currentUser.getId().equals(id)) {
+        if (currentUser == null || !currentUser.getId().equals(id)) {
             return "redirect:/auth/login";
         }
 
@@ -90,6 +75,11 @@ public class UserController {
             throw new RuntimeException("User with id '" + id + "' does not exist");
         }
 
+        if (userType== null) {
+            bindingResult.rejectValue("type", "type is not chosen");
+        }
+        user.setType(userType);
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", user);
             return "users/edit";
@@ -97,6 +87,12 @@ public class UserController {
 
         userPersisted.setName(user.getName());
         userPersisted.setUsername(user.getUsername());
+        userPersisted.setType(user.getType());
+
+        if (!user.getPassword().equals(userPersisted.getPassword())
+            && !passwordEncoder.matches(user.getPassword(), userPersisted.getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
 
         userService.update(id, userPersisted);
 

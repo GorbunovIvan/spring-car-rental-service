@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "lessors")
-@NoArgsConstructor @AllArgsConstructor
+@AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode(of = "user")
 @ToString
@@ -32,6 +32,10 @@ public class Lessor implements HasId<Long> {
     @OrderBy("id")
     @ToString.Exclude
     private List<Car> cars = new ArrayList<>();
+
+    public Lessor() {
+        setUser(new User());
+    }
 
     public Lessor(User user) {
         this.user = user;
