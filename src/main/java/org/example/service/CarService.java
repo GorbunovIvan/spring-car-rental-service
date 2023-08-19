@@ -22,7 +22,7 @@ public class CarService extends BasicService<Car, Long> {
     }
 
     public List<Car> getAllByLessor(Lessor lessor) {
-        return carRepository.findCarsByLessor(lessor);
+        return carRepository.findAllByLessor(lessor);
     }
 
     public List<String> getAllNamesByLessor(Lessor lessor) {
@@ -46,11 +46,6 @@ public class CarService extends BasicService<Car, Long> {
                 .orElse(null);
     }
 
-    public CarBrand getCarBrandByName(String name) {
-        return carRepository.findCarBrandByName(name)
-                .orElse(null);
-    }
-
     public List<CarBrand> getAllCarBrands() {
         return carRepository.findAllCarBrands();
     }
@@ -59,5 +54,10 @@ public class CarService extends BasicService<Car, Long> {
         return getAllCarBrands().stream()
                 .map(CarBrand::getName)
                 .toList();
+    }
+
+    public CarBrand getCarBrandByName(String name) {
+        return carRepository.findCarBrandByName(name)
+                .orElse(null);
     }
 }
