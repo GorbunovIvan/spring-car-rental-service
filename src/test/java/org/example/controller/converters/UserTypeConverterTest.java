@@ -1,6 +1,6 @@
 package org.example.controller.converters;
 
-import org.example.config.SpringTestConfig;
+import org.example.config.TestConfig;
 import org.example.entity.user.UserType;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
-@ContextConfiguration(classes = SpringTestConfig.class)
+@ContextConfiguration(classes = TestConfig.class)
 public class UserTypeConverterTest {
 
     @InjectMocks

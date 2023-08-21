@@ -1,7 +1,7 @@
 package org.example.service;
 
 import org.example.TestDataProvider;
-import org.example.config.SpringTestConfig;
+import org.example.config.TestConfig;
 import org.example.entity.deals.Address;
 import org.example.repository.ProductCardRepository;
 import org.mockito.InjectMocks;
@@ -17,7 +17,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
 
-@ContextConfiguration(classes = SpringTestConfig.class)
+@ContextConfiguration(classes = TestConfig.class)
 public class ProductCardServiceTest {
 
     @InjectMocks

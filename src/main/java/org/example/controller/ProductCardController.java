@@ -92,17 +92,17 @@ public class ProductCardController {
     @GetMapping("/{id}/edit")
     public String updateForm(@PathVariable Long id, Model model) {
 
-        var productCard = getProductCardOrThrowException(id);
-        if (productCard.isLeased()) {
-            throw new RuntimeException("This car is leased already");
-        }
-
         var currentUser = getCurrentUser();
         if (currentUser == null) {
             return "redirect:/auth/login";
         }
         if (currentUser.getType() != UserType.LESSOR) {
             throw new RuntimeException("You are not lessor to update product-card");
+        }
+
+        var productCard = getProductCardOrThrowException(id);
+        if (productCard.isLeased()) {
+            throw new RuntimeException("This car is leased already");
         }
         if (!productCard.getLessor().equals(currentUser.getLessor())) {
             throw new RuntimeException("You are trying to update NOT your product-card");
@@ -117,11 +117,6 @@ public class ProductCardController {
     public String update(Model model, @PathVariable Long id,
                          @ModelAttribute @Valid ProductCard productCard, BindingResult bindingResult) {
 
-        var productCardPersisted = getProductCardOrThrowException(id);
-        if (productCardPersisted.isLeased()) {
-            throw new RuntimeException("This car is leased already");
-        }
-
         var currentUser = getCurrentUser();
         if (currentUser == null) {
             return "redirect:/auth/login";
@@ -129,12 +124,17 @@ public class ProductCardController {
         if (currentUser.getType() != UserType.LESSOR) {
             throw new RuntimeException("You are not lessor to update product-card");
         }
+
+        var productCardPersisted = getProductCardOrThrowException(id);
+        if (productCardPersisted.isLeased()) {
+            throw new RuntimeException("This car is leased already");
+        }
         if (!productCardPersisted.getLessor().equals(currentUser.getLessor())) {
             throw new RuntimeException("You are trying to update NOT your product-card");
         }
 
-        if (productCardPersisted.getCar() != null) {
-            if (productCardPersisted.getCar().isInUsage()) {
+        if (productCard.getCar() != null) {
+            if (productCard.getCar().isInUsage()) {
                 bindingResult.rejectValue("car", "car is in usage already");
             }
         }
@@ -157,20 +157,20 @@ public class ProductCardController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id) {
 
-        var productCard = getProductCardOrThrowException(id);
-        if (productCard.isLeased()) {
-            throw new RuntimeException("This car is leased already");
-        }
-
         var currentUser = getCurrentUser();
         if (currentUser == null) {
             return "redirect:/auth/login";
         }
         if (currentUser.getType() != UserType.LESSOR) {
-            throw new RuntimeException("You are not lessor to update product-card");
+            throw new RuntimeException("You are not lessor to delete product-card");
+        }
+
+        var productCard = getProductCardOrThrowException(id);
+        if (productCard.isLeased()) {
+            throw new RuntimeException("This car is leased already");
         }
         if (!productCard.getLessor().equals(currentUser.getLessor())) {
-            throw new RuntimeException("You are trying to update NOT your product-card");
+            throw new RuntimeException("You are trying to delete NOT your product-card");
         }
 
         productCardService.deleteById(id);
@@ -181,14 +181,17 @@ public class ProductCardController {
     @PostMapping("/{id}/rent")
     public String rentCar(@PathVariable Long id) {
 
+        var currentUser = getCurrentUser();
+        if (currentUser == null) {
+            return "redirect:/auth/login";
+        }
+        if (currentUser.getType() != UserType.RENTER) {
+            throw new RuntimeException("You are not renter to rent a car");
+        }
+
         var productCard = getProductCardOrThrowException(id);
         if (productCard.isLeased()) {
             throw new RuntimeException("This car is leased already");
-        }
-
-        var currentUser = getCurrentUser();
-        if (currentUser.getType() != UserType.RENTER) {
-            throw new RuntimeException("You are not renter to rent a car");
         }
 
         var rentalRecord = new RentalRecord();
@@ -204,14 +207,17 @@ public class ProductCardController {
     @PatchMapping("/{id}/return")
     public String returnCar(@PathVariable Long id) {
 
+        var currentUser = getCurrentUser();
+        if (currentUser == null) {
+            return "redirect:/auth/login";
+        }
+        if (currentUser.getType() != UserType.RENTER) {
+            throw new RuntimeException("You are not renter");
+        }
+
         var productCard = getProductCardOrThrowException(id);
         if (!productCard.isLeased()) {
             throw new RuntimeException("This car was not leased yet to return it");
-        }
-
-        var currentUser = getCurrentUser();
-        if (currentUser.getType() != UserType.RENTER) {
-            throw new RuntimeException("You are not renter");
         }
 
         var rentalRecord = productCard.getRentalRecord();

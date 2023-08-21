@@ -1,7 +1,7 @@
 package org.example.service;
 
 import org.example.TestDataProvider;
-import org.example.config.SpringTestConfig;
+import org.example.config.TestConfig;
 import org.example.entity.car.Car;
 import org.example.entity.car.CarBrand;
 import org.example.repository.CarRepository;
@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
-@ContextConfiguration(classes = SpringTestConfig.class)
+@ContextConfiguration(classes = TestConfig.class)
 public class CarServiceTest {
 
     @InjectMocks

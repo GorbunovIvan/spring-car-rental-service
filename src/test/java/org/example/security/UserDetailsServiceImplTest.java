@@ -1,7 +1,7 @@
 package org.example.security;
 
 import org.example.TestDataProvider;
-import org.example.config.SpringTestConfig;
+import org.example.config.TestConfig;
 import org.example.repository.UserRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertThrows;
 
-@ContextConfiguration(classes = SpringTestConfig.class)
+@ContextConfiguration(classes = TestConfig.class)
 public class UserDetailsServiceImplTest {
 
     @InjectMocks

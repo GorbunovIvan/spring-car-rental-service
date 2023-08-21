@@ -97,7 +97,7 @@ public class UserController {
 
         userService.update(id, userPersisted);
 
-        return "redirect:/users/" + id;
+        return "redirect:/users/my-page";
     }
 
     private User getCurrentUser() {

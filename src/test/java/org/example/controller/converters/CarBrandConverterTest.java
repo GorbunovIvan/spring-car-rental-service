@@ -1,7 +1,7 @@
 package org.example.controller.converters;
 
 import org.example.TestDataProvider;
-import org.example.config.SpringTestConfig;
+import org.example.config.TestConfig;
 import org.example.entity.car.CarBrand;
 import org.example.service.CarService;
 import org.mockito.InjectMocks;
@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
 
-@ContextConfiguration(classes = SpringTestConfig.class)
+@ContextConfiguration(classes = TestConfig.class)
 public class CarBrandConverterTest {
 
     @InjectMocks

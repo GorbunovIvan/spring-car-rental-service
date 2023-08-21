@@ -42,7 +42,8 @@
             <div>
                 <label for="username">Username</label>
                 <input id="username" type="text" th:field="*{username}"/>
-                <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>
+<!--                <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>-->
+                <div style="color:red" th:if="${#fields.hasErrors('username')}">Username error</div>
             </div>
 
             <div>

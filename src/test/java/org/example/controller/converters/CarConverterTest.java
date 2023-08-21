@@ -1,7 +1,7 @@
 package org.example.controller.converters;
 
 import org.example.TestDataProvider;
-import org.example.config.SpringTestConfig;
+import org.example.config.TestConfig;
 import org.example.entity.car.Car;
 import org.example.entity.car.Model;
 import org.example.service.CarService;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
-@ContextConfiguration(classes = SpringTestConfig.class)
+@ContextConfiguration(classes = TestConfig.class)
 public class CarConverterTest {
 
     @InjectMocks

@@ -74,11 +74,11 @@ public class TestDataProvider {
         );
 
         images = List.of(
-                new Image(1L, "test 1 name", "test 1 orig.filename", "test 1 content-type", 100L, new byte[10], cars.get(0)),
-                new Image(2L, "test 2 name", "test 2 orig.filename", "test 2 content-type", 200L, new byte[20], cars.get(0)),
-                new Image(3L, "test 3 name", "test 3 orig.filename", "test 3 content-type", 300L, new byte[30], cars.get(0)),
-                new Image(4L, "test 4 name", "test 4 orig.filename", "test 4 content-type", 400L, new byte[40], cars.get(1)),
-                new Image(4L, "test 4 name", "test 4 orig.filename", "test 4 content-type", 400L, new byte[40], cars.get(1))
+                new Image(1L, "test 1 name", "test 1 orig.filename", "image/png", 100L, new byte[10], cars.get(0)),
+                new Image(2L, "test 2 name", "test 2 orig.filename", "image/png", 200L, new byte[20], cars.get(0)),
+                new Image(3L, "test 3 name", "test 3 orig.filename", "image/png", 300L, new byte[30], cars.get(0)),
+                new Image(4L, "test 4 name", "test 4 orig.filename", "image/png", 400L, new byte[40], cars.get(1)),
+                new Image(5L, "test 5 name", "test 5 orig.filename", "image/png", 500L, new byte[50], cars.get(1))
         );
 
         // deals
@@ -90,12 +90,14 @@ public class TestDataProvider {
         productCards = List.of(
                 new ProductCard(1L, cars.get(1), BigDecimal.valueOf(100), addresses.get(1), LocalDateTime.now(), null),
                 new ProductCard(2L, cars.get(2), BigDecimal.valueOf(200), addresses.get(0), LocalDateTime.now(), null),
-                new ProductCard(3L, cars.get(0), BigDecimal.valueOf(300), addresses.get(0), LocalDateTime.now(), null)
+                new ProductCard(3L, cars.get(0), BigDecimal.valueOf(300), addresses.get(0), LocalDateTime.now(), null),
+                new ProductCard(4L, cars.get(1), BigDecimal.valueOf(300), addresses.get(0), LocalDateTime.now().plusSeconds(1L), null)
         );
 
         rentalRecords = List.of(
                 new RentalRecord(1L, productCards.get(0), renters.get(0), LocalDateTime.now(), LocalDateTime.now().plusSeconds(1L)),
-                new RentalRecord(1L, productCards.get(1), renters.get(1), LocalDateTime.now(), null)
+                new RentalRecord(2L, productCards.get(3), renters.get(0), LocalDateTime.now().plusSeconds(2L), null),
+                new RentalRecord(3L, productCards.get(1), renters.get(1), LocalDateTime.now(), null)
         );
 
         configureAllTies();
