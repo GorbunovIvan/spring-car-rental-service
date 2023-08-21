@@ -8,7 +8,6 @@ import org.example.entity.HasId;
 
 @Entity
 @Table(name = "car_brands")
-@AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode(of = "name")
 @ToString
@@ -27,9 +26,26 @@ public class CarBrand implements HasId<Integer> {
         setName("");
     }
 
+    public CarBrand(Integer id, String name) {
+        this(name);
+        this.id = id;
+    }
+
+    public CarBrand(String name) {
+        setName(name);
+    }
+
+    public void setName(String name) {
+        this.name = name.replaceAll(" ", "-");
+    }
+
     @PrePersist
     @PreUpdate
     private void init() {
-        setName(getName().replaceAll(" ", "-"));
+        remasterName();
+    }
+
+    private void remasterName() {
+        setName(getName());
     }
 }

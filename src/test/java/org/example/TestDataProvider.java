@@ -83,7 +83,7 @@ public class TestDataProvider {
 
         // deals
         addresses = List.of(
-                new Address(1L, "US", "Los angeles", "Avenue", "5"),
+                new Address(1L, "US", "Los-angeles", "Avenue", "5"),
                 new Address(2L, "Fr", "Lille", "Vencile", "12")
         );
 
