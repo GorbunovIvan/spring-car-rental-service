@@ -37,10 +37,15 @@ public class AuthController {
                            @ModelAttribute @Valid User user, BindingResult bindingResult,
                            @RequestParam(name = "userType", required = false) UserType userType) {
 
-        if (userType== null) {
+        if (userType == null) {
             bindingResult.rejectValue("type", "type is not chosen");
+        } else {
+            user.setType(userType);
         }
-        user.setType(userType);
+
+        if (userService.getByUsername(user.getUsername()) != null) {
+            bindingResult.rejectValue("username", "username is not free");
+        }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", user);

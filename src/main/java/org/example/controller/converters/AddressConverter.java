@@ -18,7 +18,7 @@ public class AddressConverter implements Converter<String, Address> {
     @Override
     public Address convert(@NonNull String source) {
 
-        var pattern = Pattern.compile("(\\S+), (\\S+), (\\S+), (\\S+)");
+        var pattern = Pattern.compile("(.+?), (.+?), (.+?), (.+)");
         var matcher = pattern.matcher(source);
 
         if (!matcher.find()) {

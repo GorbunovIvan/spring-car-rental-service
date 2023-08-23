@@ -101,16 +101,11 @@ public class CarController {
         var images = filesToList(image1, image2, image3);
         imageService.addImagesToCar(car, images);
 
-        return "redirect:/cars";
+        return "redirect:/users/my-page";
     }
 
     @GetMapping("/{id}/edit")
     public String updateForm(@PathVariable Long id, Model model) {
-
-        var car = carService.getById(id);
-        if (car == null) {
-            throw new RuntimeException("Car with id '" + id + "' does not exist");
-        }
 
         var currentUser = getCurrentUser();
         if (currentUser == null) {
@@ -119,6 +114,12 @@ public class CarController {
         if (currentUser.getType() != UserType.LESSOR) {
             throw new RuntimeException("You are not lessor to edit car");
         }
+
+        var car = carService.getById(id);
+        if (car == null) {
+            throw new RuntimeException("Car with id '" + id + "' does not exist");
+        }
+
         if (!car.getLessor().equals(currentUser.getLessor())) {
             throw new RuntimeException("You are trying to update NOT your car");
         }
@@ -139,17 +140,17 @@ public class CarController {
                          @RequestParam(value = "image2", required = false) MultipartFile image2,
                          @RequestParam(value = "image3", required = false) MultipartFile image3) {
 
-        var carPersisted = carService.getById(id);
-        if (carPersisted == null) {
-            throw new RuntimeException("Car with id '" + id + "' does not exist");
-        }
-
         var currentUser = getCurrentUser();
         if (currentUser == null) {
             return "redirect:/auth/login";
         }
         if (currentUser.getType() != UserType.LESSOR) {
             throw new RuntimeException("You are not lessor to update car");
+        }
+
+        var carPersisted = carService.getById(id);
+        if (carPersisted == null) {
+            throw new RuntimeException("Car with id '" + id + "' does not exist");
         }
         if (!carPersisted.getLessor().equals(currentUser.getLessor())) {
             throw new RuntimeException("You are trying to update NOT your car");

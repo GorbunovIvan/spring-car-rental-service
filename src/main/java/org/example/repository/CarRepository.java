@@ -14,12 +14,12 @@ import java.util.Optional;
 
 public interface CarRepository extends JpaRepository<Car, Long> {
 
-    List<Car> findCarsByLessor(Lessor lessor);
-
     @Query("FROM Car cars " +
             "LEFT JOIN FETCH cars.productCards productCards")
     @NonNull
     List<Car> findAll();
+
+    List<Car> findAllByLessor(Lessor lessor);
 
     @Query("FROM Car cars " +
             "LEFT JOIN FETCH cars.productCards productCards " +
@@ -45,5 +45,5 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             "AND year = :year")
     Optional<Model> findModelByMainFields(@Param("carBrand") String carBrand,
                                           @Param("modelName") String modelName,
-                                          @Param("year") int year);
+                                          @Param("year") Integer year);
 }

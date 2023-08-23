@@ -18,7 +18,7 @@ public class CarConverter implements Converter<String, Car> {
     @Override
     public Car convert(@NonNull String source) {
 
-        var pattern = Pattern.compile("(\\S+) (\\S+), (\\d{4}) by (.+)");
+        var pattern = Pattern.compile("(.+?) (.+?), (\\d{4}) by (.+)");
         var matcher = pattern.matcher(source);
 
         if (!matcher.find()) {

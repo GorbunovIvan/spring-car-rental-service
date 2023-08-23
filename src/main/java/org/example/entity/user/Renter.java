@@ -37,12 +37,22 @@ public class Renter implements HasId<Long> {
         this.user = user;
     }
 
-    public List<Car> getCarsInUsage() {
+    public List<ProductCard> getProductCardsInUsage() {
         return rentalRecords.stream()
                 .filter(r -> !r.isReturned())
                 .map(RentalRecord::getProductCard)
+                .toList();
+    }
+
+    public List<Car> getCarsInUsage() {
+        return getProductCardsInUsage().stream()
                 .map(ProductCard::getCar)
                 .toList();
+    }
+
+    public boolean leasedACarFromProductCard(ProductCard productCard) {
+        return getRentalRecords().stream()
+                .anyMatch(r -> r.getProductCard().equals(productCard));
     }
 
     public String getName() {

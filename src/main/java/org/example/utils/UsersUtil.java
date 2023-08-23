@@ -2,7 +2,7 @@ package org.example.utils;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entity.user.User;
-import org.example.repository.UserRepository;
+import org.example.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UsersUtil {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     public User getCurrentUser() {
 
@@ -25,8 +25,7 @@ public class UsersUtil {
         if (principal instanceof User user) {
             return user;
         } else if (principal instanceof UserDetails user) {
-            return userRepository.findByUsernameEagerly(user.getUsername())
-                    .orElse(null);
+            return userService.getByUsername(user.getUsername());
         }
 
         return null;

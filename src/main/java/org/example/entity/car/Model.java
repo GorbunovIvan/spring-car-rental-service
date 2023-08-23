@@ -11,7 +11,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "models")
-@AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode(of = { "carBrand", "modelName", "year", "horsePowers" })
 @ToString
@@ -45,6 +44,27 @@ public class Model implements HasId<Long> {
         setCarBrand(new CarBrand());
     }
 
+    public Model(Long id, CarBrand carBrand, String modelName, Integer year, Integer horsePowers, List<Car> cars) {
+        this(id, carBrand, modelName, year, horsePowers);
+        this.cars = cars;
+    }
+
+    public Model(Long id, CarBrand carBrand, String modelName, Integer year, Integer horsePowers) {
+        this(carBrand, modelName, year, horsePowers);
+        this.id = id;
+    }
+
+    public Model(CarBrand carBrand, String modelName, Integer year, Integer horsePowers) {
+        setCarBrand(carBrand);
+        setModelName(modelName);
+        setYear(year);
+        setHorsePowers(horsePowers);
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName.replaceAll(" ", "-");
+    }
+
     public String getFullName() {
         return getFullNamePattern(getCarBrand().getName(), getModelName(), getYear());
     }
@@ -55,6 +75,10 @@ public class Model implements HasId<Long> {
 
     @PrePersist
     private void init() {
-        setModelName(getModelName().replaceAll(" ", "-"));
+        remasterModel();
+    }
+
+    private void remasterModel() {
+        setModelName(getModelName());
     }
 }

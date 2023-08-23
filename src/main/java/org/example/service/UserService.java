@@ -21,4 +21,9 @@ public class UserService extends BasicService<User, Long> {
         return userRepository.findByIdEagerly(id)
                 .orElse(null);
     }
+
+    public User getByUsername(String username) {
+        return userRepository.findByUsernameEagerly(username)
+                .orElse(null);
+    }
 }
