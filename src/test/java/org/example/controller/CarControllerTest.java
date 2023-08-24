@@ -172,7 +172,7 @@ public class CarControllerTest extends AbstractTestNGSpringContextTests {
                         .param("horsePowers", String.valueOf(newCar.getModel().getHorsePowers()))
                         .param("year", String.valueOf(newCar.getModel().getYear())))
                 .andExpect(status().isFound())
-                .andExpect(view().name("redirect:/cars"));
+                .andExpect(view().name("redirect:/users/my-page"));
 
         verify(usersUtil, times(3)).getCurrentUser();
         verify(carService, times(1)).create(any(Car.class));

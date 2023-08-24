@@ -12,14 +12,23 @@ import java.util.Optional;
 
 public interface ProductCardRepository extends JpaRepository<ProductCard, Long>, ProductCardRepositoryCustom {
 
-//    @Query("FROM ProductCard productCards " +
-//            "LEFT JOIN FETCH productCards.rentalRecord rentalRecords")
+    @Query("FROM ProductCard productCards " +
+            "LEFT JOIN FETCH productCards.rentalRecord rentalRecords " +
+            "LEFT JOIN FETCH productCards.address addresses " +
+            "LEFT JOIN FETCH productCards.car cars " +
+            "LEFT JOIN FETCH cars.model cars_models " +
+            "LEFT JOIN FETCH cars_models.carBrand cars_models_carBrands")
     @NonNull
     List<ProductCard> findAll();
 
-//    @Query("FROM ProductCard productCards " +
-//            "LEFT JOIN FETCH productCards.rentalRecord rentalRecords " +
-//            "WHERE productCards.id = :id")
+    @Query("FROM ProductCard productCards " +
+            "LEFT JOIN FETCH productCards.rentalRecord rentalRecords " +
+            "LEFT JOIN FETCH productCards.address addresses " +
+            "LEFT JOIN FETCH productCards.car cars " +
+            "LEFT JOIN FETCH cars.lessor lessors " +
+            "LEFT JOIN FETCH cars.model cars_models " +
+            "LEFT JOIN FETCH cars_models.carBrand cars_models_carBrands " +
+            "WHERE productCards.id = :id")
     @NonNull
     Optional<ProductCard> findById(@Param("id") @NonNull Long id);
 

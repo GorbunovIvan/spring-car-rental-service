@@ -52,6 +52,8 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                         "LEFT JOIN FETCH users.lessor lessors " +
                         "LEFT JOIN FETCH users.renter renters " +
                         "LEFT JOIN FETCH lessors.cars lessors_cars " +
+                        "LEFT JOIN FETCH lessors_cars.model lessors_cars_models " +
+                        "LEFT JOIN FETCH lessors_cars_models.carBrand lessors_cars_models_carBrand " +
                         "WHERE users.username = :username", User.class)
                 .setParameter("username", username)
                 .getResultList().stream()
@@ -79,7 +81,13 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
             Map<Car, List<ProductCard>> productCards = entityManager.createQuery(
                             "FROM ProductCard productCards " +
-                                    "WHERE productCards.car.lessor = :lessor", ProductCard.class)
+                                    "LEFT JOIN FETCH productCards.rentalRecord rentalRecords " +
+                                    "LEFT JOIN FETCH productCards.car cars " +
+                                    "LEFT JOIN FETCH productCards.address addresses " +
+                                    "LEFT JOIN FETCH rentalRecords.renter rentalRecords_renters " +
+                                    "LEFT JOIN FETCH cars.model cars_models " +
+                                    "LEFT JOIN FETCH cars_models.carBrand cars_models_carBrands " +
+                                    "WHERE cars.lessor = :lessor", ProductCard.class)
                     .setParameter("lessor", lessor)
                     .getResultList().stream()
                     .collect(Collectors.groupingBy(ProductCard::getCar, Collectors.toList()));

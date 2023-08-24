@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
@@ -15,8 +16,14 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
             "LEFT JOIN FETCH users.roles roles " +
             "LEFT JOIN FETCH users.lessor lessors " +
             "LEFT JOIN FETCH users.renter renters " +
-            "LEFT JOIN FETCH lessors.cars lessors_cars " +
             "WHERE users.id = :id")
     @NonNull
     Optional<User> findById(@Param("id") @Nullable Long id);
+
+    @Query("FROM User users " +
+            "LEFT JOIN FETCH users.roles roles " +
+            "LEFT JOIN FETCH users.lessor lessors " +
+            "LEFT JOIN FETCH users.renter renters")
+    @NonNull
+    List<User> findAll();
 }
