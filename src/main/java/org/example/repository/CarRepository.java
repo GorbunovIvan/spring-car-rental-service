@@ -15,20 +15,43 @@ import java.util.Optional;
 public interface CarRepository extends JpaRepository<Car, Long> {
 
     @Query("FROM Car cars " +
-            "LEFT JOIN FETCH cars.productCards productCards")
+            "LEFT JOIN FETCH cars.productCards productCards " +
+            "LEFT JOIN FETCH cars.model models " +
+            "LEFT JOIN FETCH cars.lessor lessors " +
+            "LEFT JOIN FETCH productCards.address productCards_addresses " +
+            "LEFT JOIN FETCH productCards.rentalRecord rentalRecords " +
+            "LEFT JOIN FETCH models.carBrand models_carBrand")
     @NonNull
     List<Car> findAll();
 
-    List<Car> findAllByLessor(Lessor lessor);
+    @Query("FROM Car cars " +
+            "LEFT JOIN FETCH cars.productCards productCards " +
+            "LEFT JOIN FETCH cars.model models " +
+            "LEFT JOIN FETCH cars.lessor lessors " +
+            "LEFT JOIN FETCH productCards.address productCards_addresses " +
+            "LEFT JOIN FETCH productCards.rentalRecord rentalRecords " +
+            "LEFT JOIN FETCH models.carBrand models_carBrand " +
+            "WHERE cars.lessor = :lessor")
+    List<Car> findAllByLessor(@Param("lessor") Lessor lessor);
 
     @Query("FROM Car cars " +
             "LEFT JOIN FETCH cars.productCards productCards " +
+            "LEFT JOIN FETCH cars.model models " +
+            "LEFT JOIN FETCH cars.lessor lessors " +
+            "LEFT JOIN FETCH productCards.address productCards_addresses " +
+            "LEFT JOIN FETCH productCards.rentalRecord rentalRecords " +
+            "LEFT JOIN FETCH models.carBrand models_carBrand " +
             "WHERE cars.model = :model")
     @NonNull
     List<Car> findAllByModel(@Param("model") Model model);
 
     @Query("FROM Car cars " +
             "LEFT JOIN FETCH cars.productCards productCards " +
+            "LEFT JOIN FETCH cars.model models " +
+            "LEFT JOIN FETCH cars.lessor lessors " +
+            "LEFT JOIN FETCH productCards.address productCards_addresses " +
+            "LEFT JOIN FETCH productCards.rentalRecord rentalRecords " +
+            "LEFT JOIN FETCH models.carBrand models_carBrand " +
             "WHERE cars.id = :id")
     @NonNull
     Optional<Car> findById(@Param("id") @NonNull Long id);
