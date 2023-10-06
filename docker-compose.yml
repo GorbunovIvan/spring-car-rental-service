@@ -1,0 +1,31 @@
+
+version: "3.8"
+
+services:
+
+  #  PostgreSQL service
+  postgres-db:
+    image: postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: postgres
+      POSTGRES_DB: spring-car-rental-service
+
+  #  spring-car-rental-service
+  spring-car-rental-service:
+    depends_on:
+      - postgres-db
+    image: spring-car-rental-service-image
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_JSON : '{
+          "spring.datasource.url" : "jdbc:postgresql://postgres-db:5432/spring-car-rental-service",
+          "spring.datasource.username" : "postgres",
+          "spring.datasource.password" : "root".
+          "spring.datasource.initialization-mode" : "always",
+          "spring.datasource.continue-on-error" : "true",
+          "spring.datasource.max-wait" : "30000"
+        }'
